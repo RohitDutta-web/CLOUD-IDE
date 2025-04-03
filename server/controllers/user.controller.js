@@ -36,4 +36,22 @@ export const register = async (req, res) => {
 //nodemailer for server side email verification pending
 // use https://blog.openreplay.com/implementing-email-validation-and-verification/
 
-export const verifyEmail = async(req, res) =>{}
+export const logIn = async (req, res) => {
+  try { }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server issue",
+      success: false,
+    })
+  }
+}
+
+export const verifyEmail = async (req, res) => {
+  try { }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false
+    })
+  }
+}
