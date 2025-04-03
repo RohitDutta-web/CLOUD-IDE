@@ -7,12 +7,23 @@ export const register = async (req, res) => {
     if (!username || !email || !password) {
       return res.status(400).json({ message: "Missing credentials", success: false });
     }
-    
-    //email validation pending
-    //nodemailer for server side email verification pending
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      guest: false,
+    })
 
-   }
+    return res.status(200).json({
+      message: "User creation successful",
+      success: true,
+      username,
+      email,
+      guest: false,
+    })
+  }
   catch (e) {
     return res.status(500).json({
       message: "Internal server error",
@@ -20,3 +31,9 @@ export const register = async (req, res) => {
     })
   }
 }
+
+//email validation pending
+//nodemailer for server side email verification pending
+// use https://blog.openreplay.com/implementing-email-validation-and-verification/
+
+export const verifyEmail = async(req, res) =>{}
