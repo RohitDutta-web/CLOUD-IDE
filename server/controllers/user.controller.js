@@ -37,7 +37,32 @@ export const register = async (req, res) => {
 // use https://blog.openreplay.com/implementing-email-validation-and-verification/
 
 export const logIn = async (req, res) => {
-  try { }
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Missing credentials", success: false
+      })
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "user not registered",
+        success: false,
+      })
+    }
+
+    const passwordVerification = bcrypt.verify(password, user.password);
+    if (!passwordVerification) {
+      return res.status(400).json({
+        message: "Wrong credentials",
+        success: false
+      })
+    }
+
+    
+
+  }
   catch (e) {
     return res.status(500).json({
       message: "Internal server issue",
