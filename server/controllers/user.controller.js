@@ -95,6 +95,37 @@ export const logIn = async (req, res) => {
   }
 }
 
+
+export const guestLogIn = async (req, res) => {
+  try {
+    const randomNumber = Math.floor(Math.random() * 100000000);
+
+    let username = `guest${randomNumber}`
+    let email = `${username}@guestEmail.com`
+    let password = await bcrypt.hash(`guest${randomNumber}`, 10)
+
+    let guest = await User.findOne({ email })
+    if (!guest) {
+      await User.create({
+        username: username,
+        email: email,
+        password: password,
+        guest: true
+      })
+      guest = await User.findOne({ email })
+
+    }
+
+
+
+  }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server error",
+      success: true,
+    })
+  }
+}
 export const verifyEmail = async (req, res) => {
   try { }
   catch (e) {
