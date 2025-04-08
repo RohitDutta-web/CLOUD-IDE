@@ -80,6 +80,7 @@ export const logIn = async (req, res) => {
           email: user.email,
           guest: user.guest,
           username: user.username,
+          verification: user.emailVerified
         }
       })
 
