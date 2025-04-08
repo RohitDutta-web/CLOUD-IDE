@@ -105,11 +105,11 @@ export const guestLogIn = async (req, res) => {
       const randomNumber = Math.floor(Math.random() * 100000000);
 
       let username = `guest${randomNumber}`
-      let generatedEmail   = `${username}@guestEmail.com`
+      let generatedEmail = `${username}@guestEmail.com`
       let password = await bcrypt.hash(`guest${randomNumber}`, 10)
       guest = await User.create({
         username,
-        email: generatedEmail  ,
+        email: generatedEmail,
         password,
         guest: true,
         createdAt: new Date(),
@@ -137,8 +137,31 @@ export const guestLogIn = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { username, email, password } = req.body
-    
-   }
+    const id = req.id
+    const user = await User.findById({ id })
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid user",
+        success: false
+      })
+    }
+    const passwordVerification = await bcrypt.verify(user.password, password);
+    if (!passwordVerification) {
+      return res.status(400).json({
+        message: "Invalid password or username",
+        success: false
+      })
+    }
+    user.username = username
+    user.email = email
+    user.save();
+
+    return res.status(200).json({
+      message: "User info updated",
+      success: true
+    })
+  }
   catch (e) {
     return res.status(500).json({
       message: "Internal server issue",
