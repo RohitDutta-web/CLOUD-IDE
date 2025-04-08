@@ -18,10 +18,15 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  createdAt: {
+    type: Date,
+    default: undefined
   }
-})
+}, { timestamps: true })
 
 userSchema.index({ email: 1 })
+userSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 })
 
 const User = mongoose.model("User", userSchema)
 export default User;
