@@ -14,7 +14,6 @@ export const register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      guest: false,
     })
 
     return res.status(200).json({
@@ -98,23 +97,32 @@ export const logIn = async (req, res) => {
 
 export const guestLogIn = async (req, res) => {
   try {
-    const randomNumber = Math.floor(Math.random() * 100000000);
-
-    let username = `guest${randomNumber}`
-    let email = `${username}@guestEmail.com`
-    let password = await bcrypt.hash(`guest${randomNumber}`, 10)
-
+    const { email } = req.body
     let guest = await User.findOne({ email })
+
     if (!guest) {
-      await User.create({
-        username: username,
-        email: email,
-        password: password,
-        guest: true
+      const randomNumber = Math.floor(Math.random() * 100000000);
+
+      let username = `guest${randomNumber}`
+      let generatedEmail   = `${username}@guestEmail.com`
+      let password = await bcrypt.hash(`guest${randomNumber}`, 10)
+      guest = await User.create({
+        username,
+        email: generatedEmail  ,
+        password,
+        guest: true,
+        createdAt: new Date(),
       })
-      guest = await User.findOne({ email })
+       
 
     }
+
+
+    return res.status(200).json({
+      message: "Logged in as a guest",
+      success: true,
+      guest
+    })
 
 
 
@@ -122,7 +130,7 @@ export const guestLogIn = async (req, res) => {
   catch (e) {
     return res.status(500).json({
       message: "Internal server error",
-      success: true,
+      success: false,
     })
   }
 }
