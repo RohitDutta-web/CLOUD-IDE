@@ -114,11 +114,7 @@ export const guestLogIn = async (req, res) => {
         guest: true,
         createdAt: new Date(),
       })
-       
-
     }
-
-
     return res.status(200).json({
       message: "Logged in as a guest",
       success: true,
@@ -132,6 +128,21 @@ export const guestLogIn = async (req, res) => {
     return res.status(500).json({
       message: "Internal server error",
       success: false,
+    })
+  }
+}
+
+
+
+export const updateUser = async (req, res) => {
+  try {
+    const { username, email, password } = req.body
+    
+   }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server issue",
+      success: false
     })
   }
 }
