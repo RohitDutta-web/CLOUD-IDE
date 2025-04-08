@@ -169,6 +169,19 @@ export const updateUser = async (req, res) => {
     })
   }
 }
+
+
+export const sentVerificationMail = async (req, res) => {
+  try { }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false
+    })
+  }
+ }
+
+
 export const verifyEmail = async (req, res) => {
   try { }
   catch (e) {
