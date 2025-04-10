@@ -184,8 +184,6 @@ export const sentVerificationMail = async (req, res) => {
         success: false
       })
     }
-
-
     const userMailId = user.email;
     const mailOptions = {
       from: process.env.MAILID,
@@ -195,8 +193,6 @@ export const sentVerificationMail = async (req, res) => {
       ${process.env.VERIFICATION_LINK}
       `
     }
-
-
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log("Error : " + error);
@@ -207,7 +203,6 @@ export const sentVerificationMail = async (req, res) => {
       }
 
       console.log("Email sent : " + info);
-      
 
       return res.status(200).json({
         message: "Verification mail send",
@@ -225,7 +220,23 @@ export const sentVerificationMail = async (req, res) => {
 
 
 export const verifyEmail = async (req, res) => {
-  try { }
+  try {
+    const id = req.params.id;
+    const user = await User.findById(id)
+    if (!user) {
+      return res.status(400).json({
+        message: "invalid user ",
+        success: false
+      })
+    }
+
+    user.emailVerified = true
+    user.save()
+    return res.status(200).json({
+      message: "Verification complete",
+      success: true
+    })
+   }
   catch (e) {
     return res.status(500).json({
       message: "Internal server error",
