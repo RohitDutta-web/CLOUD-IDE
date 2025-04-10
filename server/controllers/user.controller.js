@@ -1,6 +1,9 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { transporter } from "../config/smtp.config.js";
+import dotenv from "dotenv";
+dotenv.config({})
 
 export const register = async (req, res) => {
   try {
@@ -172,14 +175,53 @@ export const updateUser = async (req, res) => {
 
 
 export const sentVerificationMail = async (req, res) => {
-  try { }
+  try {
+    const id = req.id;
+    const user = await User.findById( id );
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid profile",
+        success: false
+      })
+    }
+
+
+    const userMailId = user.email;
+    const mailOptions = {
+      from: process.env.MAILID,
+      to: userMailId,
+      subject: "USER VERIFICATION",
+      text: `Let’s make it official! Click below to prove you're the real deal. \n
+      ${process.env.VERIFICATION_LINK}
+      `
+    }
+
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log("Error : " + error);
+        return res.status(500).json({
+          message: "Invalid mail credentials",
+          success: false
+        })
+      }
+
+      console.log("Email sent : " + info);
+      
+
+      return res.status(200).json({
+        message: "Verification mail send",
+        success: true
+      })
+    })
+  }
   catch (e) {
     return res.status(500).json({
       message: "Internal server error",
       success: false
     })
   }
- }
+}
 
 
 export const verifyEmail = async (req, res) => {
