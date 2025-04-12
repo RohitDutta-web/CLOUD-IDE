@@ -1,0 +1,1 @@
+import { register, logIn, guestLogIn, updateUser, verifyEmail, sentVerificationMail } from "../controllers/user.controller.js";

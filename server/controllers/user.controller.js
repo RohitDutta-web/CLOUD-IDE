@@ -5,6 +5,8 @@ import { transporter } from "../config/smtp.config.js";
 import dotenv from "dotenv";
 dotenv.config({})
 
+
+//user registration
 export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -39,6 +41,8 @@ export const register = async (req, res) => {
 //nodemailer for server side email verification pending
 // use https://blog.openreplay.com/implementing-email-validation-and-verification/
 
+
+//login  function for registered users
 export const logIn = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -99,6 +103,8 @@ export const logIn = async (req, res) => {
 }
 
 
+
+/* guest login allows only to practice coding or creating a room for temporary collaboration */
 export const guestLogIn = async (req, res) => {
   try {
     const { email } = req.body
@@ -137,6 +143,7 @@ export const guestLogIn = async (req, res) => {
 
 
 
+//update user details with password verification
 export const updateUser = async (req, res) => {
   try {
     const { username, email, password } = req.body
@@ -173,11 +180,11 @@ export const updateUser = async (req, res) => {
   }
 }
 
-
+//func send email for verification with verification link
 export const sentVerificationMail = async (req, res) => {
   try {
     const id = req.id;
-    const user = await User.findById( id );
+    const user = await User.findById(id);
     if (!user) {
       return res.status(400).json({
         message: "Invalid profile",
@@ -219,6 +226,8 @@ export const sentVerificationMail = async (req, res) => {
 }
 
 
+
+//email verification func
 export const verifyEmail = async (req, res) => {
   try {
     const id = req.params.id;
@@ -236,7 +245,19 @@ export const verifyEmail = async (req, res) => {
       message: "Verification complete",
       success: true
     })
-   }
+  }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false
+    })
+  }
+}
+
+
+//logout function 
+export const logOut = async (req, res) => {
+  try { }
   catch (e) {
     return res.status(500).json({
       message: "Internal server error",
