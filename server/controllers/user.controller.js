@@ -257,7 +257,18 @@ export const verifyEmail = async (req, res) => {
 
 //logout function 
 export const logOut = async (req, res) => {
-  try { }
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    })
+
+    return res.status(200).json({
+      message: "Logout successful",
+      success: false
+    })
+  }
   catch (e) {
     return res.status(500).json({
       message: "Internal server error",
