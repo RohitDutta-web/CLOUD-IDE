@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import { dbConnection } from "./config/db.js";
 import bodyParser from "body-parser";
+import userRouter from "./routes/user.routes.js";
 dotenv.config({})
 let app = express();
 

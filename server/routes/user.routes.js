@@ -11,3 +11,6 @@ router.put("/update", userAuthentication,  updateUser);
 router.get("/verification", userAuthentication, sentVerificationMail);
 router.get("/emailVerification", userAuthentication, verifyEmail);
 router.get("/logOut", userAuthentication, logOut);
+
+
+export default router;
