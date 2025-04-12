@@ -11,7 +11,8 @@ let app = express();
 app.use(express.json());
 app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(helmet());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/user", userRouter);
 
 
 
