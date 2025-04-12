@@ -59,7 +59,7 @@ export const logIn = async (req, res) => {
       })
     }
 
-    const passwordVerification = bcrypt.verify(password, user.password);
+    const passwordVerification = bcrypt.compare(password, user.password);
     if (!passwordVerification) {
       return res.status(400).json({
         message: "Wrong credentials",
@@ -95,6 +95,8 @@ export const logIn = async (req, res) => {
 
   }
   catch (e) {
+    console.log(e);
+
     return res.status(500).json({
       message: "Internal server issue",
       success: false,
@@ -148,7 +150,7 @@ export const updateUser = async (req, res) => {
   try {
     const { username, email, password } = req.body
     const id = req.id
-    const user = await User.findById({ id })
+    const user = await User.findById(id)
 
     if (!user) {
       return res.status(400).json({
@@ -156,7 +158,7 @@ export const updateUser = async (req, res) => {
         success: false
       })
     }
-    const passwordVerification = await bcrypt.verify(user.password, password);
+    const passwordVerification = await bcrypt.compare(password, user.password);
     if (!passwordVerification) {
       return res.status(400).json({
         message: "Invalid password or username",
@@ -173,6 +175,8 @@ export const updateUser = async (req, res) => {
     })
   }
   catch (e) {
+    console.log(e);
+
     return res.status(500).json({
       message: "Internal server issue",
       success: false
