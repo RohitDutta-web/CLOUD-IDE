@@ -195,14 +195,22 @@ export const sentVerificationMail = async (req, res) => {
         success: false
       })
     }
+    const link = process.env.VERIFICATION_LINK
+
     const userMailId = user.email;
     const mailOptions = {
       from: process.env.MAILID,
       to: userMailId,
       subject: "USER VERIFICATION",
-      text: `Let’s make it official! Click below to prove you're the real deal. \n
-      ${process.env.VERIFICATION_LINK}
-      `
+      html: `
+    <p>Let’s make it official! Click the button below to verify your email:</p>
+    <a href="${link}/${id}" 
+       style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+       Verify Email
+    </a>
+    <p>If the button doesn't work, copy and paste this link in your browser:</p>
+    <p>${link}/${id}</p>
+  `
     }
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
