@@ -9,7 +9,7 @@ router.post("/logIn", logIn);
 router.post("guest/logIn", guestLogIn);
 router.put("/update", userAuthentication,  updateUser);
 router.get("/verification", userAuthentication, sentVerificationMail);
-router.get("/emailVerification/:id", userAuthentication, verifyEmail);
+router.get("/emailVerification/:id", verifyEmail);
 router.get("/logOut", userAuthentication, logOut);
 
 
