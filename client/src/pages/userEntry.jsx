@@ -1,17 +1,17 @@
 import LogInImage from "../assets/login-image.png";
-import { useState } from "react";
+
 
 export default function UserEntry() {
-  const { entry, setEntry } = useState("login");
+ 
   return (
     <>
       <div className=" w-screen p-2 h-screen flex justify-center items-center bg-zinc-800">
-        <div className="rounded-lg  border-2 border-green-700 p-2 flex flex-col items-center  h-auto">
+        <div className="rounded-lg   p-2 flex flex-col items-center  h-auto">
 
 
-          <div className="flex bg-zinc-700 w-1/2 rounded-full justify-between gap-5 p-2 font-bold items-center text-zinc-500">
-            <button className="focus:bg-green-700 focus:text-white rounded-full pt-1 pb-1 pl-2 pr-2 ">Log In</button>
-            <button className="focus:bg-green-700 focus:text-white rounded-full pt-1 pb-1 pl-2 pr-2 ">Sign Up</button>
+          <div className="flex bg-zinc-700 w-1/2 lg:w-1/3 rounded-full justify-between gap-5 p-2 font-bold items-center text-zinc-500">
+            <button className="focus:bg-green-700 w-1/3 focus:text-white rounded-full pt-1 pb-1 pl-2 pr-2 ">Log In</button>
+            <button className="focus:bg-green-700 w-1/3 focus:text-white rounded-full pt-1 pb-1 pl-2 pr-2 ">Sign Up</button>
           </div>
 
           <div className="flex  items-center">
@@ -25,6 +25,8 @@ export default function UserEntry() {
 
 
           </div>
+
+          
 
         </div>
 
