@@ -41,9 +41,10 @@ export default function UserEntry() {
               <div className="flex  items-center mt-5">
             <img src={signUpImage } alt="signup" className="w-1/2 " />
 
-            <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
+                <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
+                <input placeholder="Username" type="text" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
               <input placeholder="Email" type="email" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
-              <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="" id="" />
+              <input placeholder="Password"  className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="" id="" />
               <input type="submit" value="Sign up" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" />
             </form>
 
@@ -51,7 +52,9 @@ export default function UserEntry() {
           </div>
           }
 
-          
+          <div className="mt-3 font-bold text-md text-zinc-600">
+            Want to login as a guest ? <button className="text-lg bg-green-800 text-zinc-400 p-2 m-1 rounded hover:bg-green-400 hover:text-white hover:outline-2 hover:outline-offset-2 hover:outline-green-400 cursor-pointer">Guest Login</button>
+          </div>
 
         </div>
 
