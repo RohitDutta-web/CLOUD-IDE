@@ -21,18 +21,41 @@ const io = new Server(server, {
   }
 })
 
+const userSocketMap = new Map();
+
 io.on('connection', (socket) => {
   console.log("Socket connected " + socket.id);
   
+  socket.on("login", (userID) => {
+    userSocketMap.set(userID, socket.id);
+    console.log(`User ${userID} registered with socket ${socket.id}`);
+  })
 
-  socket.on("message", (data) => {
-    console.log("Message received:", data);
-    io.emit("message", data); 
+  socket.on("room-chat", ({ toUserID, message }) => {
+    const toSocketID = userSocketMap.get(toUserID);
+    if (toSocketID) {
+      io.to(toSocketID).emit("private-message", {
+        fromUserId: getUserIdBySocketId(socket.id),
+        message,
+      });
+    }
+  })
+
+  socket.on("disconnect", () => {
+    const disconnectedUserId = getUserIdBySocketId(socket.id);
+    if (disconnectedUserId) {
+      userSocketMap.delete(disconnectedUserId);
+    }
+    console.log("User disconnected:", socket.id);
   });
 
-  socket.on('disconnect', () => {
-    console.log("User disconnected");
-  })
+  
+  function getUserIdBySocketId(socketId) {
+    for (const [userId, sId] of userSocketMap.entries()) {
+      if (sId === socketId) return userId;
+    }
+    return null;
+  }
 })
 
 app.use(express.json());
