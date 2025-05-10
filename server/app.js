@@ -6,8 +6,19 @@ import { dbConnection } from "./config/db.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
+import http from "http";
+import { Server } from "socket.io";
 dotenv.config({})
 let app = express();
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    credentials: true
+  }
+})
 
 app.use(express.json());
 app.use(cookieParser());
@@ -19,7 +30,7 @@ app.use("/user", userRouter);
 
 
 const port = process.env.PORT;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("Server is live");
   dbConnection();
 })
