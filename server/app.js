@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import http from "http";
 import { Server } from "socket.io";
+import { log } from "console";
 dotenv.config({})
 let app = express();
 
@@ -18,6 +19,20 @@ const io = new Server(server, {
     origin: process.env.CLIENT_URL,
     credentials: true
   }
+})
+
+io.on('connection', (socket) => {
+  console.log("Socket connected " + socket.id);
+  
+
+  socket.on("message", (data) => {
+    console.log("Message received:", data);
+    io.emit("message", data); 
+  });
+
+  socket.on('disconnect', () => {
+    console.log("User disconnected");
+  })
 })
 
 app.use(express.json());
