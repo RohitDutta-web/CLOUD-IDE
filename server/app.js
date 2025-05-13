@@ -24,7 +24,7 @@ const io = new Server(server, {
 const userSocketMap = new Map();
 
 io.on('connection', (socket) => {
-  console.log("Socket connected " + socket.id);
+  console.log("User connected with socketID " + socket.id);
   
   socket.on("login", (userID) => {
     userSocketMap.set(userID, socket.id);
