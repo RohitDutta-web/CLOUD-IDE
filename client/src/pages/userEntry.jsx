@@ -18,11 +18,11 @@ export default function UserEntry() {
  
   return (
     <>
-      <div className=" w-screen p-2 h-screen flex justify-center items-center bg-zinc-800">
-        <div className="rounded-lg   p-2 flex flex-col items-center  h-auto">
+      <div className=" w-screen max-w-screen p-2 h-screen flex justify-center items-center bg-zinc-800">
+        <div className="rounded-lg w-screen max-w-screen  p-2 flex flex-col items-center  h-auto">
 
 
-          <div className="flex bg-zinc-700 w-1/2 lg:w-1/3 rounded-full justify-between gap-5 p-2 font-bold items-center text-zinc-500">
+          <div className="flex bg-zinc-700 absolute w-[500px] top-[10%]  max-w-screen rounded-full justify-between gap-5 p-2 font-bold items-center text-zinc-500">
             <button onClick={btnLogin} className={ userEntry === "login" ? "bg-green-500 cursor-pointer w-1/3 text-white rounded-full pt-1 pb-1 pl-2 pr-2 " : "hover:bg-green-900 cursor-pointer w-1/3 hover:text-white rounded-full pt-1 pb-1 pl-2 pr-2 " } >Log In</button>
             <button onClick={btnSignup} className={ userEntry === "signup" ? "bg-green-500 cursor-pointer w-1/3 text-white rounded-full pt-1 pb-1 pl-2 pr-2 " : "hover:bg-green-900 cursor-pointer w-1/3 hover:text-white rounded-full pt-1 pb-1 pl-2 pr-2 " }>Sign Up</button>
           </div>
