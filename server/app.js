@@ -25,37 +25,29 @@ const userSocketMap = new Map();
 
 io.on('connection', (socket) => {
   console.log("User connected with socketID " + socket.id);
-  
-  socket.on("login", (userID) => {
+
+  socket.on("join-room", (roomId, userID) => {
+    socket.join(roomId)
     userSocketMap.set(userID, socket.id);
-    console.log(`User ${userID} registered with socket ${socket.id}`);
+    socket.to(roomId).emit('user-joined', { userID });
   })
 
-  socket.on("room-chat", ({ toUserID, message }) => {
-    const toSocketID = userSocketMap.get(toUserID);
-    if (toSocketID) {
-      io.to(toSocketID).emit("private-message", {
-        fromUserId: getUserIdBySocketId(socket.id),
-        message,
-      });
-    }
-  })
-
-  socket.on("disconnect", () => {
-    const disconnectedUserId = getUserIdBySocketId(socket.id);
-    if (disconnectedUserId) {
-      userSocketMap.delete(disconnectedUserId);
-    }
-    console.log("User disconnected:", socket.id);
+   socket.on('send-message', ({ roomId, message, sender }) => {
+    io.to(roomId).emit('receive-message', { message, sender });
   });
 
   
-  function getUserIdBySocketId(socketId) {
-    for (const [userId, sId] of userSocketMap.entries()) {
-      if (sId === socketId) return userId;
-    }
-    return null;
-  }
+  socket.on('disconnect', () => {
+    for (const [userId, sockId] of userSocketMap) {
+      if (sockId === socket.id) {
+        userSocketMap.delete(userId);
+        console.log(`${userId} disconnected`);
+        break;
+      }
+    }})
+
+
+ 
 })
 
 app.use(express.json());
