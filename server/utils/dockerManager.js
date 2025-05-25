@@ -13,14 +13,30 @@ export const createUSerContainer = async (userId) => {
     Image: "your-sandbox-image",
     name: `${userId}-codeNimbus-image`,
     Tty: true,
-    cmd: ['/bin/bash'],
+    Cmd: ['/bin/bash'],
     HostConfig: {
       Binds: [`${userDir}:/workspace`],
       AutoRemove: false,
     }
   })
+
+  await container.start()
+  return container.id;
 }
 
 
 //temporary room container
-export const createRoomContainer = async() => {}
+export const createRoomContainer = async (roomId) => {
+  const container = await docker.createContainer({
+    Image: "you-sandbox-image",
+    Name: `${roomId}-image`,
+    Tty: true,
+    Cmd: ["/bin/bash"],
+    HostConfig: {
+      AutoRemove: true,
+    },
+  })
+
+  await container.start();
+  return container.id;
+}
