@@ -8,12 +8,12 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import http from "http";
 import { Server } from "socket.io";
-import Docker from "dockerode";
+
 dotenv.config({})
 let app = express();
 
 const server = http.createServer(app);
-const docker = new Docker();
+
 const io = new Server(server, {
   cors: '*'
 })
