@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import http from "http";
 import { Server } from "socket.io";
+import { createRoomContainer } from "./utils/dockerManager.js";
+import jwt from "jsonwebtoken";
 
 dotenv.config({})
 let app = express();
@@ -20,13 +22,32 @@ const io = new Server(server, {
 
 const userSocketMap = new Map();
 
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+
+  if (!token) {
+    return next(new Error("Authentication token missing"));
+  }
+
+  try {
+    const verified = jwt.verify(token, process.env.SECRET_KEY);
+    socket.userId = verified.id; 
+    next();
+  } catch (err) {
+    next(new Error("Authentication failed"));
+  }
+});
+
 io.on('connection', (socket) => {
+
+  const userId = socket.userId;
   console.log("User connected with socketID " + socket.id);
 
-  socket.on("join-room", (roomId, userID) => {
+  socket.on("join-room", (roomId) => {
     socket.join(roomId)
-    userSocketMap.set(userID, socket.id);
-    socket.to(roomId).emit('user-joined', { userID });
+    createRoomContainer(roomId)
+    userSocketMap.set(userId, socket.id);
+    socket.to(roomId).emit('user-joined', { userId });
   })
 
    socket.on('send-message', ({ roomId, message, sender }) => {
