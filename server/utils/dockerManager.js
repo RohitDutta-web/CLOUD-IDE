@@ -5,7 +5,7 @@ const docker = new Docker();
 //user private docker container
 export const createUSerContainer = async (userId) => {
   const userDir = `/home/codeNimbus/user/${userId}`
-  if (fs.existsSync(userDir)) {
+  if (!fs.existsSync(userDir)) {
     fs.mkdirSync(userDir, { recursive: true });
   }
 
