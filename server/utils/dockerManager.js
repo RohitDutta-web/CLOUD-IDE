@@ -10,7 +10,7 @@ export const createUSerContainer = async (userId) => {
   }
 
   const container = await docker.createContainer({
-    Image: "your-sandbox-image",
+    Image: "your-code-nimbus-image",
     name: `${userId}-codeNimbus-image`,
     Tty: true,
     Cmd: ['/bin/bash'],
@@ -19,7 +19,7 @@ export const createUSerContainer = async (userId) => {
       AutoRemove: false,
     }
   })
-
+  console.log("User container is on!");
   await container.start()
   return container.id;
 }

@@ -8,8 +8,11 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import http from "http";
 import { Server } from "socket.io";
-import { createRoomContainer } from "./utils/dockerManager.js";
+import { createRoomContainer, createUSerContainer } from "./utils/dockerManager.js";
 import jwt from "jsonwebtoken";
+import cookie from 'cookie';
+
+
 
 dotenv.config({})
 let app = express();
@@ -23,7 +26,12 @@ const io = new Server(server, {
 const userSocketMap = new Map();
 
 io.use((socket, next) => {
-  const token = socket.handshake.auth.token;
+  const cookies = socket.handshake.headers.cookie;
+    if (!cookies) return next(new Error("Authentication token missing"));
+
+    const parsedCookies = cookie.parse(cookies);
+    const token = parsedCookies.token;
+
 
   if (!token) {
     return next(new Error("Authentication token missing"));
@@ -41,6 +49,7 @@ io.use((socket, next) => {
 io.on('connection', (socket) => {
 
   const userId = socket.userId;
+  createUSerContainer(userId);
   console.log("User connected with socketID " + socket.id);
 
   socket.on("join-room", (roomId) => {
