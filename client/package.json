@@ -11,12 +11,17 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.4",
+    "@uiw/react-textarea-code-editor": "^3.1.1",
+    "@xterm/xterm": "^5.5.0",
     "axios": "^1.9.0",
     "hamburger-react": "^2.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.2",
-    "tailwindcss": "^4.1.4"
+    "rehype-prism-plus": "^2.0.1",
+    "rehype-rewrite": "^4.0.2",
+    "tailwindcss": "^4.1.4",
+    "xterm": "^5.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
