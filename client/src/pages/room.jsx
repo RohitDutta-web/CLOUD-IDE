@@ -32,7 +32,7 @@ export default function Room() {
 
       </div>
 
-      <select className=''>
+      <select className='absolute'>
         <option value="js">JavaScript</option>
         <option value="c">C</option>
         <option value="java">Java</option>
