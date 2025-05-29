@@ -14,6 +14,7 @@ export default function Room() {
       <div className='w-full max-w-screen h-screen bg-zinc-800'>
         <div className='w-full h-2/3 bg-zinc-700'>
           <CodeEditor
+            className='h-full'
             value={code}
             language={language}
             data-color-mode="dark"
@@ -21,8 +22,9 @@ export default function Room() {
             onChange={(evn) => setCode(evn.target.value)}
             padding={15}
             style={{
-              backgroundColor: "transparent",
-              paddingTop: 20,
+              backgroundColor: "#0000",
+              position: "relative",
+              top: 50,
               fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
             }}
           />
@@ -32,16 +34,16 @@ export default function Room() {
 
       </div>
 
-      <select className='absolute'>
-        <option value="js">JavaScript</option>
-        <option value="c">C</option>
-        <option value="java">Java</option>
-        <option value="python">Python</option>
-        <option value="go">Go</option>
-        <option value="rust">Rust</option>
-        <option value="php">PHP</option>
-        <option value="ruby">Ruby</option>
-        <option value="sql">SQL</option>
+      <select onSelect={(event) => setLanguage(event.target.value)} className="absolute top-2 left-2 text-white cursor-pointer outline-2 p-2 rounded-xl" >
+        <option className='bg-zinc-700  cursor-pointer' value="js">JavaScript</option>
+        <option className='bg-zinc-700  cursor-pointer' value="c">C</option>
+        <option className='bg-zinc-700  cursor-pointer' value="java">Java</option>
+        <option className='bg-zinc-700  cursor-pointer' value="python">Python</option>
+        <option className='bg-zinc-700  cursor-pointer' value="go">Go</option>
+        <option className='bg-zinc-700  cursor-pointer' value="rust">Rust</option>
+        <option className='bg-zinc-700  cursor-pointer' value="php">PHP</option>
+        <option className='bg-zinc-700  cursor-pointer' value="ruby">Ruby</option>
+        <option className='bg-zinc-700  cursor-pointer' value="sql">SQL</option>
       </select>
     </>
   )
