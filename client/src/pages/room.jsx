@@ -68,12 +68,12 @@ export default function Room() {
           <div className='h-full w-[10%] gap-3 bg-zinc-700 flex flex-col items-center pt-2' id='users' >
             <p className='text-white'>1124</p>
             <div className='flex flex-wrap items-center gap-3 justify-center w-full'>
-               <p id='userBox' className=' bg-green-800 font-bold text-white pt-2 pb-2 pl-3 rounded pr-3'>
+               <div id='userBox' className=' bg-green-800 font-bold text-white pt-2 pb-2 pl-3 rounded pr-3'>
               RD
-            </p>
-             <p id='userBox' className=' bg-green-800 font-bold text-white pt-2 pb-2 pl-3 rounded pr-3'>
+            </div>
+             <div id='userBox' className=' bg-green-800 font-bold text-white pt-2 pb-2 pl-3 rounded pr-3'>
               RD
-            </p>
+            </div>
            </div>
 
           </div>
