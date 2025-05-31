@@ -49,9 +49,9 @@ export default function Room() {
   return (
     <>
       <div className='w-full max-w-screen h-screen bg-zinc-800'>
-        <div className='w-full h-[65%] bg-zinc-700'>
+        <div className='w-full h-[65%] bg-zinc-900 flex'>
           <CodeEditor
-            className='h-[85%]'
+            className='h-[85%] w-[90%]'
             value={code}
             language={language}
             data-color-mode="dark"
@@ -65,6 +65,18 @@ export default function Room() {
               fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
             }}
           />
+          <div className='h-full w-[10%] gap-3 bg-zinc-700 flex flex-col items-center pt-2' id='users' >
+            <p className='text-white'>1124</p>
+            <div className='flex flex-wrap items-center gap-3 justify-center w-full'>
+               <p id='userBox' className=' bg-green-800 font-bold text-white pt-2 pb-2 pl-3 rounded pr-3'>
+              RD
+            </p>
+             <p id='userBox' className=' bg-green-800 font-bold text-white pt-2 pb-2 pl-3 rounded pr-3'>
+              RD
+            </p>
+           </div>
+
+          </div>
 
         </div>
         <div id='terminal'></div>
