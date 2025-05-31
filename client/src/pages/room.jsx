@@ -49,9 +49,9 @@ export default function Room() {
   return (
     <>
       <div className='w-full max-w-screen h-screen bg-zinc-800'>
-        <div className='w-full h-2/3 bg-zinc-700'>
+        <div className='w-full h-[65%] bg-zinc-700'>
           <CodeEditor
-            className='h-full'
+            className='h-[85%]'
             value={code}
             language={language}
             data-color-mode="dark"
