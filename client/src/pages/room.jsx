@@ -8,6 +8,43 @@ export default function Room() {
     `function add(a, b) {\n  return a + b;\n}`
   );
 
+  const handleCodeLan = (e) => {
+  const selectedLang = e.target.value;
+  setLanguage(selectedLang);
+
+  switch (selectedLang) {
+    case "js":
+      setCode(`function add(a, b) {\n  return a + b;\n}`);
+      break;
+    case "c":
+      setCode(`int add(int a, int b) {\n  return a + b;\n}`);
+      break;
+    case "java":
+      setCode(`public class Main {\n  public static int add(int a, int b) {\n    return a + b;\n  }\n}`);
+      break;
+    case "python":
+      setCode(`def add(a, b):\n    return a + b`);
+      break;
+    case "go":
+      setCode(`func add(a int, b int) int {\n  return a + b\n}`);
+      break;
+    case "rust":
+      setCode(`fn add(a: i32, b: i32) -> i32 {\n    a + b\n}`);
+      break;
+    case "php":
+      setCode(`function add($a, $b) {\n  return $a + $b;\n}`);
+      break;
+    case "ruby":
+      setCode(`def add(a, b)\n  a + b\nend`);
+      break;
+    case "sql":
+      setCode(`CREATE FUNCTION add(a INT, b INT)\nRETURNS INT\nDETERMINISTIC\nRETURN a + b;`);
+      break;
+  }
+
+
+    
+  }
   const [language, setLanguage] = useState("js")
   return (
     <>
@@ -34,7 +71,7 @@ export default function Room() {
 
       </div>
 
-      <select onSelect={(event) => setLanguage(event.target.value)} className="absolute top-2 left-2 text-white cursor-pointer outline-2 p-2 rounded-xl" >
+      <select onChange={ (e) => handleCodeLan(e)} className="absolute top-2 left-2 text-white cursor-pointer outline-2 p-2 rounded-xl" >
         <option className='bg-zinc-700  cursor-pointer' value="js">JavaScript</option>
         <option className='bg-zinc-700  cursor-pointer' value="c">C</option>
         <option className='bg-zinc-700  cursor-pointer' value="java">Java</option>
