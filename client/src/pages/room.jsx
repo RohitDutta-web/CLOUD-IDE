@@ -76,7 +76,7 @@ export default function Room() {
                 RD
               </div>
             </div>
-            <IoMdChatboxes className='absolute top-[58%] text-zinc-300 text-4xl'/>
+            <IoMdChatboxes className='cursor-pointer hover:text-white  absolute top-[58%] text-zinc-300 text-4xl'/>
 
 
 
@@ -98,6 +98,11 @@ export default function Room() {
         <option className='bg-zinc-700  cursor-pointer' value="ruby">Ruby</option>
         <option className='bg-zinc-700  cursor-pointer' value="sql">SQL</option>
       </select>
+
+
+      <div id='chat'>
+
+      </div>
     </>
   )
 }
