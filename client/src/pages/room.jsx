@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { IoMdChatboxes } from "react-icons/io";
-import { Terminal } from 'xterm';
-import 'xterm/css/xterm.css';
+import XTerminal from '../components/terminal';
 import { useParams } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
 
@@ -125,7 +124,7 @@ export default function Room() {
           </div>
 
         </div>
-        <div id='terminal'></div>
+        <div id='terminal' className='h-[33%] overflow-auto mt-3'> <XTerminal/></div>
 
       </div>
 
