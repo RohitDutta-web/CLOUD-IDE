@@ -11,6 +11,8 @@ import { Server } from "socket.io";
 import { createRoomContainer, createUSerContainer } from "./utils/dockerManager.js";
 import jwt from "jsonwebtoken";
 import cookie from 'cookie';
+import pty from "node-pty";
+import os from "os";
 
 
 
