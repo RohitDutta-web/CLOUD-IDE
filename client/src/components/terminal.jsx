@@ -1,6 +1,12 @@
 import { Terminal } from '@xterm/xterm';
 import { useEffect, useRef } from 'react';
 import "@xterm/xterm/css/xterm.css";
+import io from "socket.io-client";
+
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  withCredentials: true,
+  transports: ['websocket'],
+});
 export default function TerminalUi() {
 
   const terminalRef = useRef(null);
