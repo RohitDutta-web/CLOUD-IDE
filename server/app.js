@@ -12,7 +12,7 @@ import { createRoomContainer, createUSerContainer } from "./utils/dockerManager.
 import jwt from "jsonwebtoken";
 import cookie from 'cookie';
 import pty from "node-pty";
-import os from "os";
+
 
 
 
@@ -53,12 +53,37 @@ io.on('connection', (socket) => {
   const userId = socket.userId;
   createUSerContainer(userId);
   console.log("User connected with socketID " + socket.id);
+  const shell = 'bash';
+  let ptyProcess;
 
   socket.on("join-room", (roomId) => {
     socket.join(roomId)
     createRoomContainer(roomId)
     userSocketMap.set(userId, socket.id);
     socket.to(roomId).emit('user-joined', { userId });
+
+
+      ptyProcess = pty.spawn(shell, [], {
+      name: 'xterm-color',
+      cols: 80,
+      rows: 24,
+      cwd: path.resolve(process.env.HOME || '/home'),
+      env: process.env,
+      });
+    
+     ptyProcess.on('data', (data) => {
+      socket.emit('terminal-output', data);
+    });
+    
+     socket.on('terminal-input', (input) => {
+      ptyProcess.write(input);
+     });
+    
+    socket.on('resize-terminal', ({ cols, rows }) => {
+      if (ptyProcess) {
+        ptyProcess.resize(cols, rows);
+      }
+    });
   })
 
    socket.on('send-message', ({ roomId, message, sender }) => {
