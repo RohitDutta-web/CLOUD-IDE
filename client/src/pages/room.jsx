@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { IoMdChatboxes } from "react-icons/io";
 import XTerminal from '../components/terminal';
 import { useParams } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
+import io from "socket.io-client";
+const socket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:3000", {
+  withCredentials: true,
+  transports: ['websocket'],
+});
 
 export default function Room() {
+
+  const isRendered = useRef(false);
+
+  useEffect(() => {
+    
+    if (isRendered.current) return;
+    isRendered.current = true;
+
+    socket.on("connect", () => {
+      console.log(`Socket has been connected `);
+    })
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected!");
+      
+    })
+
+  }, [])
 
 
   const messages = [
@@ -13,28 +36,28 @@ export default function Room() {
       sender: "Rohit",
       message: "Hello",
     },
-      {
+    {
       sender: "Jiju",
       message: "Hello",
     },
-        {
+    {
       sender: "Niya",
       message: "Hello",
     },
-          {
+    {
       sender: "Baba",
       message: "Hello",
     },
-            {
+    {
       sender: "Ma",
       message: "Hello",
-    },  {
+    }, {
       sender: "Didi",
       message: "Hello",
-    },  {
+    }, {
       sender: "Bubu",
       message: "Hello",
-    },  {
+    }, {
       sender: "Attoja",
       message: "Hello",
     }
@@ -90,7 +113,7 @@ export default function Room() {
   const [language, setLanguage] = useState("js")
   return (
     <>
-      <div className='w-full max-w-screen h-screen bg-zinc-800'>
+      <div className='w-full max-w-screen h-screen bg-zinc-800' >
         <div className='w-full h-[65%] bg-zinc-900 flex'>
           <CodeEditor
             className='h-[85%] w-[90%]'
@@ -117,14 +140,14 @@ export default function Room() {
                 RD
               </div>
             </div>
-            <IoMdChatboxes className='cursor-pointer hover:text-white  absolute top-[58%] text-zinc-300 text-4xl'  onClick={handleChatBox} />
+            <IoMdChatboxes className='cursor-pointer hover:text-white  absolute top-[58%] text-zinc-300 text-4xl' onClick={handleChatBox} />
 
 
 
           </div>
 
         </div>
-        <div id='terminal' className='h-[33%] overflow-auto mt-3'> <XTerminal/></div>
+        <div id='terminal' className='h-[33%] overflow-auto mt-3'> <XTerminal /></div>
 
       </div>
 
@@ -143,31 +166,31 @@ export default function Room() {
 
       {
         chatBox ? (
-               <div
-      id="chat"
-      className="w-[300px] z-40 absolute top-[20%] right-[8%] rounded shadow-2xl bg-zinc-200 flex flex-col h-[500px]"
-    >
-      
-      <div className="flex-1 overflow-y-auto p-2 space-y-2">
-        {messages.map((_, i) => (
-          <div key={i} className="bg-zinc-400 p-2 rounded">
-            <p className="font-bold text-sm">{ messages[i].sender }</p>
-            <p>{ messages[i].message }</p>
-          </div>
-        ))}
-      </div>
+          <div
+            id="chat"
+            className="w-[300px] z-40 absolute top-[20%] right-[8%] rounded shadow-2xl bg-zinc-200 flex flex-col h-[500px]"
+          >
 
-    
-      <div className="bg-zinc-700 flex items-center gap-3 p-2">
-        <input
-          type="text"
-          className="bg-zinc-300 w-[80%] rounded-full p-2"
-          placeholder="Type a message..."
-        />
-        <IoMdSend className="text-2xl text-white cursor-pointer" />
-      </div>
-    </div>) : null
-       }
+            <div className="flex-1 overflow-y-auto p-2 space-y-2">
+              {messages.map((_, i) => (
+                <div key={i} className="bg-zinc-400 p-2 rounded">
+                  <p className="font-bold text-sm">{messages[i].sender}</p>
+                  <p>{messages[i].message}</p>
+                </div>
+              ))}
+            </div>
+
+
+            <div className="bg-zinc-700 flex items-center gap-3 p-2">
+              <input
+                type="text"
+                className="bg-zinc-300 w-[80%] rounded-full p-2"
+                placeholder="Type a message..."
+              />
+              <IoMdSend className="text-2xl text-white cursor-pointer" />
+            </div>
+          </div>) : null
+      }
     </>
   )
 }
