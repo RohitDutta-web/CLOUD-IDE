@@ -5,7 +5,7 @@ import XTerminal from '../components/terminal';
 import { useParams } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
 import io from "socket.io-client";
-const socket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:3000", {
+const socket = io( "http://localhost:3000", {
   withCredentials: true,
   transports: ['websocket'],
 });
