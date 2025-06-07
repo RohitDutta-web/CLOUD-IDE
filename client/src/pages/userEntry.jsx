@@ -1,13 +1,31 @@
 import LogInImage from "../assets/login-image.png";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import signUpImage from "../assets/Create-new-client-accounts.png";
+import axios from "axios";
 
 
-
+const logInHandler = async () => {
+  try {
+    
+   }
+  catch (e) {
+    console.log(e);
+    
+  }
+}
 export default function UserEntry() {
 
+  const isRendered = useRef(false);
+
+  useEffect(() => {
+    if (isRendered.current) return;
+    isRendered.current = true;
+
+
+  }, [])
+
   let [userEntry, setUSerEntry] = useState("login");
-  
+
   const btnLogin = () => {
     setUSerEntry("login");
   }
@@ -15,7 +33,7 @@ export default function UserEntry() {
   const btnSignup = () => {
     setUSerEntry("signup")
   }
- 
+
   return (
     <>
       <div className=" w-screen max-w-screen p-2 h-screen flex justify-center items-center bg-zinc-800">
@@ -23,34 +41,34 @@ export default function UserEntry() {
 
 
           <div className="flex bg-zinc-700 absolute w-[500px] top-[10%]  max-w-screen rounded-full justify-between gap-5 p-2 font-bold items-center text-zinc-500">
-            <button onClick={btnLogin} className={ userEntry === "login" ? "bg-green-500 cursor-pointer w-1/3 text-white rounded-full pt-1 pb-1 pl-2 pr-2 " : "hover:bg-green-900 cursor-pointer w-1/3 hover:text-white rounded-full pt-1 pb-1 pl-2 pr-2 " } >Log In</button>
-            <button onClick={btnSignup} className={ userEntry === "signup" ? "bg-green-500 cursor-pointer w-1/3 text-white rounded-full pt-1 pb-1 pl-2 pr-2 " : "hover:bg-green-900 cursor-pointer w-1/3 hover:text-white rounded-full pt-1 pb-1 pl-2 pr-2 " }>Sign Up</button>
+            <button onClick={btnLogin} className={userEntry === "login" ? "bg-green-500 cursor-pointer w-1/3 text-white rounded-full pt-1 pb-1 pl-2 pr-2 " : "hover:bg-green-900 cursor-pointer w-1/3 hover:text-white rounded-full pt-1 pb-1 pl-2 pr-2 "} >Log In</button>
+            <button onClick={btnSignup} className={userEntry === "signup" ? "bg-green-500 cursor-pointer w-1/3 text-white rounded-full pt-1 pb-1 pl-2 pr-2 " : "hover:bg-green-900 cursor-pointer w-1/3 hover:text-white rounded-full pt-1 pb-1 pl-2 pr-2 "}>Sign Up</button>
           </div>
 
           {
             userEntry === "login" ? <div className="flex  items-center mt-5">
-            <img src={LogInImage } alt="Login" className="w-1/2 " />
+              <img src={LogInImage} alt="Login" className="w-1/2 " />
 
-            <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
-              <input placeholder="Email" type="email" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
-              <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="" id="" />
-              <input type="submit" value="Log In" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" />
-            </form>
+              <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
+                <input placeholder="Email" type="email" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
+                <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="" id="" />
+                <input type="submit" value="Log In" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" />
+              </form>
 
 
             </div> :
               <div className="flex  items-center mt-5">
-            <img src={signUpImage } alt="signup" className="w-1/2 " />
+                <img src={signUpImage} alt="signup" className="w-1/2 " />
 
                 <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
-                <input placeholder="Username" type="text" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
-              <input placeholder="Email" type="email" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
-              <input placeholder="Password"  className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="" id="" />
-              <input type="submit" value="Sign up" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" />
-            </form>
+                  <input placeholder="Username" type="text" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
+                  <input placeholder="Email" type="email" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
+                  <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="" id="" />
+                  <input type="submit" value="Sign up" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" />
+                </form>
 
 
-          </div>
+              </div>
           }
 
           <div className="mt-3 font-bold text-md text-zinc-600">
