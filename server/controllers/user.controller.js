@@ -9,12 +9,26 @@ dotenv.config({})
 //user registration
 export const register = async (req, res) => {
   try {
+   
+    
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
+
+      
       return res.status(400).json({ message: "Missing credentials", success: false });
     }
 
+    const isUserRegistered = await User.findOne({ email });
+    if (isUserRegistered) {
+      return res.status(400).json({
+        message: "User already registered",
+        success: false
+      })
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    
     await User.create({
       username,
       email,
@@ -30,6 +44,7 @@ export const register = async (req, res) => {
     })
   }
   catch (e) {
+    
     return res.status(500).json({
       message: "Internal server error",
       success: false
