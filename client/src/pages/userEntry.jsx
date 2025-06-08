@@ -16,34 +16,69 @@ export default function UserEntry() {
     let { name, value } = e.target;
 
     setLogInForm((prev) => (
-      {...prev,
-      [name]: value}
+      {
+        ...prev,
+        [name]: value
+      }
     ))
   }
   const logInHandler = async (e) => {
     e.preventDefault();
-    
+
     try {
-    console.log(logInForm);
-    
-    const data = await axios.post(import.meta.env.VITE_BACKEND_LOGIN, logInForm, 
-      {
-         headers: {
-          'Content-Type': 'application/json'
+      console.log(logInForm);
+
+      const data = await axios.post(import.meta.env.VITE_BACKEND_LOGIN, logInForm,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
-      }
-    )
+      )
 
-    console.log(data);
-    
-    
-   }
-  catch (e) {
-    console.log(e);
-    
+      console.log(data);
+
+
+    }
+    catch (e) {
+      console.log(e);
+
+    }
   }
-}
 
+
+  const [signUpForm, setSignUpForm] = useState({
+    username: "",
+    email: "",
+    password: ""
+
+  })
+
+
+  const signUpFormHandler = (e) => {
+    const { name, value } = e.target;
+
+    setSignUpForm((prev) => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(import.meta.env.VITE_BACKEND_SIGNUP, signUpForm, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+    }
+    catch (e) {
+      console.log(e);
+
+    }
+  }
   const isRendered = useRef(false);
 
   useEffect(() => {
@@ -79,9 +114,9 @@ export default function UserEntry() {
               <img src={LogInImage} alt="Login" className="w-1/2 " />
 
               <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
-                <input placeholder="Email" type="email" name="email" id="email" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700"  onChange={handleLogInForm}/>
-                <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="password" onChange={handleLogInForm}/>
-                <input type="submit" value="Log In" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold"  onClick={logInHandler}/>
+                <input placeholder="Email" type="email" name="email" id="email" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={handleLogInForm} />
+                <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="password" onChange={handleLogInForm} />
+                <input type="submit" value="Log In" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" onClick={logInHandler} />
               </form>
 
 
@@ -90,10 +125,10 @@ export default function UserEntry() {
                 <img src={signUpImage} alt="signup" className="w-1/2 " />
 
                 <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
-                  <input placeholder="Username" type="text" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
-                  <input placeholder="Email" type="email" name="" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" />
-                  <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="" id="" />
-                  <input type="submit" value="Sign up" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" />
+                  <input placeholder="Username" type="text" name="username" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler} />
+                  <input placeholder="Email" type="email" name="email" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler} />
+                  <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="" onChange={signUpFormHandler} />
+                  <input type="submit" value="Sign up" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" onClick={handleSignUp} />
                 </form>
 
 
