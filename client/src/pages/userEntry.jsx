@@ -31,8 +31,10 @@ export default function UserEntry() {
       const data = await axios.post(import.meta.env.VITE_BACKEND_LOGIN, logInForm,
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+
+          },
+          withCredentials: true,
         }
       )
 
