@@ -40,8 +40,9 @@ export default function UserEntry() {
           withCredentials: true,
         }
       )
+console.log(data);
 
-      if (data) {
+      /* if (data) {
         dispatch.setUser({
           email: data.email,
           username: data.username,
@@ -50,7 +51,7 @@ export default function UserEntry() {
         })
 
         
-      }
+      } */
 
 
     }
