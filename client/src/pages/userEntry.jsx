@@ -2,10 +2,13 @@ import LogInImage from "../assets/login-image.png";
 import { useState, useEffect, useRef } from "react";
 import signUpImage from "../assets/Create-new-client-accounts.png";
 import axios from "axios";
-
+import { useDispatch } from "react-redux";
+import { setUser } from "../utils/userSlice.js";
 
 
 export default function UserEntry() {
+
+  const dispatch = useDispatch();
 
   const [logInForm, setLogInForm] = useState({
     email: "",
@@ -38,7 +41,16 @@ export default function UserEntry() {
         }
       )
 
-      console.log(data);
+      if (data) {
+        dispatch.setUser({
+          email: data.email,
+          username: data.username,
+          isLoggedIn: true,
+          isGuest: data.guest
+        })
+
+        
+      }
 
 
     }
