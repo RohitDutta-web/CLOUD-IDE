@@ -42,16 +42,16 @@ export default function UserEntry() {
       )
 console.log(data);
 
-      /* if (data) {
+       if (data.response?.data?.success) {
         dispatch.setUser({
-          email: data.email,
-          username: data.username,
+          email: data.data?.user?.email,
+          username: data.data?.user?.username,
           isLoggedIn: true,
-          isGuest: data.guest
+          isGuest: data.data?.user?.guest
         })
 
         
-      } */
+      } 
 
 
     }
@@ -129,8 +129,8 @@ console.log(data);
               <img src={LogInImage} alt="Login" className="w-1/2 " />
 
               <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
-                <input placeholder="Email" type="email" name="email" id="email" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={handleLogInForm} />
-                <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="password" onChange={handleLogInForm} />
+                <input placeholder="Email" type="email" name="email" id="email" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={handleLogInForm} value={logInForm.email} />
+                <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="password" onChange={handleLogInForm}  value={logInForm.password}/>
                 <input type="submit" value="Log In" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" onClick={logInHandler} />
               </form>
 
@@ -140,9 +140,9 @@ console.log(data);
                 <img src={signUpImage} alt="signup" className="w-1/2 " />
 
                 <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
-                  <input placeholder="Username" type="text" name="username" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler} />
-                  <input placeholder="Email" type="email" name="email" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler} />
-                  <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="" onChange={signUpFormHandler} />
+                  <input placeholder="Username" type="text" name="username" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler}  value={signUpForm.username}/>
+                  <input placeholder="Email" type="email" name="email" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler}  value={signUpForm.email}/>
+                  <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="" onChange={signUpFormHandler} value={signUpForm.password} />
                   <input type="submit" value="Sign up" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" onClick={handleSignUp} />
                 </form>
 
