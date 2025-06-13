@@ -43,12 +43,12 @@ export default function UserEntry() {
 console.log(data);
 
        if (data.response?.data?.success) {
-        dispatch.setUser({
+        dispatch(setUser({
           email: data.data?.user?.email,
           username: data.data?.user?.username,
           isLoggedIn: true,
           isGuest: data.data?.user?.guest
-        })
+        }))
 
         
       } 
