@@ -15,6 +15,7 @@
     "@uiw/react-textarea-code-editor": "^3.1.1",
     "@xterm/xterm": "^5.5.0",
     "axios": "^1.9.0",
+    "framer-motion": "^12.18.1",
     "hamburger-react": "^2.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
