@@ -3,6 +3,7 @@ import Playground from './pages/playground'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Room from './pages/room'
 import './App.css'
+import Home from './pages/home'
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
         <Route path='/userEntry' element={<UserEntry />} />
         <Route path='/playground' element={<Playground />} />
         <Route path='/room/:roomId' element={<Room />} />
+        <Route path='/' element={<Home />} />
       </Routes>
 
     </BrowserRouter>
