@@ -9,6 +9,17 @@ export const createUSerContainer = async (userId) => {
     fs.mkdirSync(userDir, { recursive: true });
   }
 
+   const containerName = `${userId}-codeNimbus-image`;
+
+  // Check if the container already exists
+  const containers = await docker.listContainers({ all: true });
+  const existing = containers.find(c => c.Names.includes(`/${containerName}`));
+
+  if (existing) {
+    console.log(`Container for ${userId} already exists. Connecting to container .`);
+    return docker.getContainer(existing.Id); // return existing container
+  }
+
   const container = await docker.createContainer({
     Image: "your-code-nimbus-image",
     name: `${userId}-codeNimbus-image`,
