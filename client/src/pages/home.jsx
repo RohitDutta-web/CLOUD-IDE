@@ -12,8 +12,10 @@ export default function Home() {
             className="custom-class w-1/4 text-green-600 "
           />
 
-          <div>
-            <div className="flex gap-3 items-center">
+
+
+          <div className="flex sm:pl-20 flex-col items-center text-xl  justify-center">
+            <div className="flex gap-3 items-center justify-center">
               <p className="font-bold text-green-400 text-4xl">Code</p>
               <RotatingText
               texts={['React', 'Bits', 'Is', 'Cool!']}
@@ -29,7 +31,13 @@ export default function Home() {
             />
             </div>
 
+            <div className="text-green-400">
+              <p><span>Code Nimbus</span> is designed for seamless cloud coding.</p>
+            </div>
+
           </div>
+
+
         </div>
 
       </div>
