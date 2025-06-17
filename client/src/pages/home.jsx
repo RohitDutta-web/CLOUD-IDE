@@ -14,11 +14,11 @@ export default function Home() {
 
 
 
-          <div className="flex sm:pl-20 flex-col items-center text-xl  justify-center">
+          <div className="flex sm:pl-20 p-5 flex-col items-center text-xl  justify-center gap-2">
             <div className="flex gap-3 items-center justify-center">
               <p className="font-bold text-green-400 text-4xl">Code</p>
               <RotatingText
-              texts={['React', 'Bits', 'Is', 'Cool!']}
+              texts={['Creative', 'Unique', 'on Cloud', 'Everywhere', 'Nimbus']}
               mainClassName="px-2 w-50 text-4xl font-bold bg-green-400 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
               staggerFrom={"last"}
               initial={{ y: "100%" }}
@@ -32,7 +32,7 @@ export default function Home() {
             </div>
 
             <div className="text-green-400">
-              <p><span>Code Nimbus</span> is designed for seamless cloud coding.</p>
+              <p><span className="font-bold text-green-300">Code Nimbus</span> is designed for seamless cloud coding.</p>
             </div>
 
           </div>
