@@ -1,5 +1,6 @@
 import CircularText from "../assets/animations/circularText"
 import RotatingText from "../assets/animations/rotatingText"
+
 export default function Home() {
   return (
     <>
