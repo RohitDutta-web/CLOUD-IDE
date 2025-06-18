@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.18.1",
+    "gsap": "^3.13.0",
     "hamburger-react": "^2.5.2",
     "lucide-react": "^0.516.0",
     "ogl": "^1.0.11",

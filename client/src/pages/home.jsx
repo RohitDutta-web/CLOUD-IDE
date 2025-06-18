@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import Description from "../components/description";
 
 export default function Home() {
   return (
@@ -68,6 +69,8 @@ export default function Home() {
         <button className="cursor-pointer">Login / Signup</button>
 
       </Link>
+
+      <Description/>
     </>
   )
 }
