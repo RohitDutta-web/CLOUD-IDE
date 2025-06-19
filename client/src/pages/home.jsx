@@ -10,7 +10,12 @@ import {
 import { useSelector } from "react-redux";
 import Description from "../components/description";
 
+
+
+
 export default function Home() {
+  const user = useSelector((state) => state.user);
+console.log(user);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   return (
     <>

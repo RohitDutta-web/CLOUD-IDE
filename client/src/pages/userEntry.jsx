@@ -47,7 +47,7 @@ console.log(data);
           email: data.data?.user?.email,
           username: data.data?.user?.username,
           isLoggedIn: true,
-          isGuest: data.data?.user?.guest
+          isGuest: false
         }))
 
         
