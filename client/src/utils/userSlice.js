@@ -26,7 +26,7 @@ const userSlice = createSlice({
 
     logOut(state) {
       state.isLoggedIn = false;
-      state.cookie = null;
+      state.cookie = "";
       state.username = "",
         state.email = "",
         state.isGuest = false
