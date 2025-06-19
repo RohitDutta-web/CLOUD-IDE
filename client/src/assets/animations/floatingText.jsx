@@ -20,7 +20,7 @@ const ScrollFloat = ({
   const splitText = useMemo(() => {
     const text = typeof children === "string" ? children : "";
     return text.split("").map((char, index) => (
-      <span className="inline-block" key={index}>
+      <span className="inline-block  bg-transparent text-8xl" key={index}>
         {char === " " ? "\u00A0" : char}
       </span>
     ));
@@ -76,10 +76,11 @@ const ScrollFloat = ({
   return (
     <h2
       ref={containerRef}
-      className={`  overflow-hidden ${containerClassName}`}
+      
+      className={` w-[90%] flex justify-center bg-transparent  overflow-hidden ${containerClassName}`}
     >
       <span
-        className={` inline-block text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] ${textClassName}`}
+        className={` bg-transparent inline-block text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] ${textClassName} `}
       >
         {splitText}
       </span>
