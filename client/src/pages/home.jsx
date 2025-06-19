@@ -1,14 +1,17 @@
 import CircularText from "../assets/animations/circularText"
 import RotatingText from "../assets/animations/rotatingText"
+import { FaRegUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useSelector } from "react-redux";
 import Description from "../components/description";
 
 export default function Home() {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   return (
     <>
       <div className="max-w-screen w-full h-auto bg-zinc-900">
@@ -64,11 +67,22 @@ export default function Home() {
 
       </Popover>
 
-      <Link to={"/userEntry"} className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-40 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2">
+      {
+        isLoggedIn ? <Popover >
+          <PopoverTrigger  className="absolute text-green-400  top-5 right-40  rounded font-bold text-5xl cursor-pointer "><FaRegUserCircle /></PopoverTrigger>
+             <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
+            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Profile Details</p>
+            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Playground</p>
+            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Log Out</p>
+            
+        </PopoverContent>
+        </Popover> :
+          <Link to={"/userEntry"} className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-40 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2">
 
         <button className="cursor-pointer">Login / Signup</button>
 
       </Link>
+       }
 
       <Description/>
     </>
