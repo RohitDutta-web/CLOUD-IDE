@@ -1,13 +1,24 @@
 import UserEntry from './pages/userEntry'
 import Playground from './pages/playground'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { logOut } from './utils/userSlice';
 import Room from './pages/room'
 import './App.css'
 import Home from './pages/home'
 
 function App() {
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!document.cookie) {
+      dispatch(logOut())
+      return;
+    }
+
+    return;
+  },[])
 
   return (
     <BrowserRouter>
