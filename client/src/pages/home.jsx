@@ -13,6 +13,7 @@ import giphy from "../assets/giphy.gif";
 import { FaLaptopHouse } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
 import { GiArchiveRegister } from "react-icons/gi";
+import Features from "../components/features";
 
 
 export default function Home() {
@@ -96,7 +97,8 @@ console.log(user);
       </Link>
        }
 
-      <Description/>
+      <Description />
+      <Features/>
     </>
   )
 }
