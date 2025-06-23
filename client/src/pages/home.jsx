@@ -10,8 +10,9 @@ import {
 import { useSelector } from "react-redux";
 import Description from "../components/description";
 import giphy from "../assets/giphy.gif";
-
-
+import { FaLaptopHouse } from "react-icons/fa";
+import { IoLogIn } from "react-icons/io5";
+import { GiArchiveRegister } from "react-icons/gi";
 
 
 export default function Home() {
@@ -26,7 +27,7 @@ console.log(user);
             text="*CODE NIMBUS* "
             onHover="speedUp"
             spinDuration={20}
-            className="custom-class w-1/4 text-green-600 "
+            className="custom-class w-1/4 text-green-600 relative left-[5%]"
           />
 
 
@@ -69,7 +70,7 @@ console.log(user);
 
       <Popover  >
 
-        <PopoverTrigger className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-5 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2">Room</PopoverTrigger>
+        <PopoverTrigger className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-5 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2 flex items-center justify-center gap-2"> <FaLaptopHouse /> Room </PopoverTrigger>
 
         <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
           <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Create room</p>
@@ -88,9 +89,9 @@ console.log(user);
             
         </PopoverContent>
         </Popover> :
-          <Link to={"/userEntry"} className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-40 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2">
+          <Link to={"/userEntry"} className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-50 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2 ">
 
-        <button className="cursor-pointer">Login / Signup</button>
+        <button className="cursor-pointer flex items-center gap-2"> <IoLogIn />Login / <GiArchiveRegister />Signup</button>
 
       </Link>
        }
