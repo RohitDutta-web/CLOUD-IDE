@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/popover"
 import { useSelector } from "react-redux";
 import Description from "../components/description";
+import giphy from "../assets/giphy.gif";
 
 
 
@@ -52,11 +53,16 @@ console.log(user);
             </div>
 
           </div>
+          
 
 
         </div>
+        <div className="relative bg-transparent bottom-60 flex w-full justify-center ">
+             <img src={giphy } alt="" className="w-[70%] bg-green-400 p-10 rounded-2xl" />
+          </div>
 
       </div>
+   
 
 
 
