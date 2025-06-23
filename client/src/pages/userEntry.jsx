@@ -40,7 +40,7 @@ export default function UserEntry() {
           withCredentials: true,
         }
       )
-console.log(data);
+
 
        if (data.response?.data?.success) {
         dispatch(setUser({
