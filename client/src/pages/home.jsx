@@ -149,6 +149,23 @@ export default function Home() {
           <p className="flex items-center gap-2 text-xl"><span><GrMysql className="text-2xl" /></span>Sql</p>
         </div>
       </div>
+
+      <footer className="bg-zinc-900 text-green-400 py-8 mt-20 px-4 text-sm flex flex-col md:flex-row items-center justify-between border-t border-green-400">
+  <div className="text-center md:text-left mb-4 md:mb-0">
+    <p>© {new Date().getFullYear()} Code Nimbus — Empowering developers worldwide.</p>
+    <p className="text-xs mt-1 text-green-500">Open-source • Built by the community, for the community</p>
+  </div>
+  
+  <div className="flex flex-col md:flex-row items-center gap-4 " >
+    <a href="https://github.com/RohitDutta-web/CLOUD-IDE" target="_blank" rel="noopener noreferrer" className="hover:underline font-medium">
+      💻 Contribute on GitHub
+    </a>
+    <a href="https://github.com/RohitDutta-web/CLOUD-IDE" className="hover:underline">Documentation</a>
+    <a href="#community" className="hover:underline">Join Community</a>
+    <a href="mailto:duttarohit754@gmail.com" className="hover:underline">Contact</a>
+  </div>
+</footer>
+
     </>
   )
 }
