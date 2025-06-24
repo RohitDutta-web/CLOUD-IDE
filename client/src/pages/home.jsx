@@ -99,16 +99,26 @@ export default function Home() {
       }
 
       <Description />
-      <div className="flex items-center justify-around">
+      <div className="flex items-center gap-2 justify-around flex-col md:flex-row mt-5">
 
-        <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(0, 229, 255, 0.2)">
-  // Content goes here
+        <SpotlightCard className="custom-spotlight-card  w-1/4 text-green-300 cursor-pointer" spotlightColor="rgba(74, 222, 128, 0.2)">
+          <p className="p-2 font-bold text-xl  text-green-700">Real-Time Collaboration</p>
+          <p className="p-2">Multiple users can code together in the same environment, see live changes, and chat in real-time — perfect for pair programming or group sessions.</p>
+  
         </SpotlightCard>
-        <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(0, 229, 255, 0.2)">
-  // Content goes here
+        <SpotlightCard className="custom-spotlight-card w-1/4 text-green-300 cursor-pointer" spotlightColor="rgba(74, 222, 128, 0.2)">
+          <p className="p-2 font-bold text-xl  text-green-700">Isolated Docker Environments</p>
+          <p className="p-2">Each user gets a private containerized coding space powered by Docker, ensuring secure and consistent environments for every project.</p>
+  
         </SpotlightCard>
-        <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(0, 229, 255, 0.2)">
-  // Content goes here
+        <SpotlightCard className="custom-spotlight-card w-1/4 text-green-300 cursor-pointer" spotlightColor="rgba(74, 222, 128, 0.2)">
+          <p className="p-2 font-bold text-xl  text-green-700">
+            Integrated Terminal & Chat
+          </p>
+          <p className="p-2">
+            A built-in terminal lets users run code and commands directly, while the side chat keeps the communication seamless within coding rooms.
+          </p>
+  
         </SpotlightCard>
       </div>
     </>
