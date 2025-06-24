@@ -13,12 +13,13 @@ import giphy from "../assets/giphy.gif";
 import { FaLaptopHouse } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
 import { GiArchiveRegister } from "react-icons/gi";
-import Features from "../components/features";
+import SpotlightCard from "../assets/animations/card";
+
 
 
 export default function Home() {
   const user = useSelector((state) => state.user);
-console.log(user);
+  console.log(user);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   return (
     <>
@@ -55,16 +56,16 @@ console.log(user);
             </div>
 
           </div>
-          
+
 
 
         </div>
         <div className="relative bg-transparent bottom-60 flex w-full justify-center ">
-             <img src={giphy } alt="" className="w-[70%] bg-green-400 p-10 rounded-2xl" />
-          </div>
+          <img src={giphy} alt="" className="w-[70%] bg-green-400 p-10 rounded-2xl" />
+        </div>
 
       </div>
-   
+
 
 
 
@@ -82,23 +83,34 @@ console.log(user);
 
       {
         isLoggedIn ? <Popover >
-          <PopoverTrigger  className="absolute text-green-400  top-5 right-40  rounded font-bold text-5xl cursor-pointer "><FaRegUserCircle /></PopoverTrigger>
-             <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
+          <PopoverTrigger className="absolute text-green-400  top-5 right-40  rounded font-bold text-5xl cursor-pointer "><FaRegUserCircle /></PopoverTrigger>
+          <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
             <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Profile Details</p>
             <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Playground</p>
             <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Log Out</p>
-            
-        </PopoverContent>
+
+          </PopoverContent>
         </Popover> :
           <Link to={"/userEntry"} className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-50 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2 ">
 
-        <button className="cursor-pointer flex items-center gap-2"> <IoLogIn />Login / <GiArchiveRegister />Signup</button>
+            <button className="cursor-pointer flex items-center gap-2"> <IoLogIn />Login / <GiArchiveRegister />Signup</button>
 
-      </Link>
-       }
+          </Link>
+      }
 
       <Description />
-      <Features/>
+      <div className="flex items-center justify-around">
+
+        <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(0, 229, 255, 0.2)">
+  // Content goes here
+        </SpotlightCard>
+        <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(0, 229, 255, 0.2)">
+  // Content goes here
+        </SpotlightCard>
+        <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(0, 229, 255, 0.2)">
+  // Content goes here
+        </SpotlightCard>
+      </div>
     </>
   )
 }
