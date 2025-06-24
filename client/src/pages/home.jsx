@@ -14,8 +14,15 @@ import { FaLaptopHouse } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
 import { GiArchiveRegister } from "react-icons/gi";
 import SpotlightCard from "../assets/animations/card";
-
-
+import { IoLogoJavascript } from "react-icons/io5";
+import { TbBrandCSharp } from "react-icons/tb";
+import { FaJava } from "react-icons/fa";
+import { SiPython } from "react-icons/si";
+import { FaGolang } from "react-icons/fa6";
+import { FaRust } from "react-icons/fa";
+import { FaPhp } from "react-icons/fa";
+import { DiRuby } from "react-icons/di";
+import { GrMysql } from "react-icons/gr";
 
 export default function Home() {
   const user = useSelector((state) => state.user);
@@ -99,17 +106,17 @@ export default function Home() {
       }
 
       <Description />
-      <div className="flex items-center gap-2 justify-around flex-col md:flex-row mt-5">
+      <div className="flex items-center gap-2 justify-around flex-col md:flex-row mt-20">
 
         <SpotlightCard className="custom-spotlight-card  w-1/4 text-green-300 cursor-pointer" spotlightColor="rgba(74, 222, 128, 0.2)">
           <p className="p-2 font-bold text-xl  text-green-700">Real-Time Collaboration</p>
           <p className="p-2">Multiple users can code together in the same environment, see live changes, and chat in real-time — perfect for pair programming or group sessions.</p>
-  
+
         </SpotlightCard>
         <SpotlightCard className="custom-spotlight-card w-1/4 text-green-300 cursor-pointer" spotlightColor="rgba(74, 222, 128, 0.2)">
           <p className="p-2 font-bold text-xl  text-green-700">Isolated Docker Environments</p>
           <p className="p-2">Each user gets a private containerized coding space powered by Docker, ensuring secure and consistent environments for every project.</p>
-  
+
         </SpotlightCard>
         <SpotlightCard className="custom-spotlight-card w-1/4 text-green-300 cursor-pointer" spotlightColor="rgba(74, 222, 128, 0.2)">
           <p className="p-2 font-bold text-xl  text-green-700">
@@ -118,8 +125,29 @@ export default function Home() {
           <p className="p-2">
             A built-in terminal lets users run code and commands directly, while the side chat keeps the communication seamless within coding rooms.
           </p>
-  
+
         </SpotlightCard>
+      </div>
+
+
+      <div className="w-full max-w-screen flex mt-50 mb-10">
+        <div className="w-1/2 flex flex-col items-center justify-center text-green-700 ">
+          <p className="font-bold text-md text-start w-[80%] text-green-500">Code in your favorite major languages</p>
+          <p className="text-start w-[80%]">
+            Code Nimbus currently supports popular languages, with more coming soon in future updates.
+          </p>
+        </div>
+        <div className="w-1/2 grid grid-cols-3 grid-rows-3 gap-5 text-white  ">
+          <p className="flex items-center gap-2 text-xl"> <span><IoLogoJavascript className="text-2xl" /></span>JavaScript</p>
+          <p className="flex items-center gap-2 text-xl"> <span><TbBrandCSharp className="text-2xl" /></span>c</p>
+          <p className="flex items-center gap-2 text-xl"><span><FaJava className="text-2xl" /></span>Java</p>
+          <p className="flex items-center gap-2 text-xl"><span><SiPython className="text-2xl" /></span>Python</p>
+          <p className="flex items-center gap-2 text-xl"><span><FaGolang className="text-2xl" /></span>Go</p>
+          <p className="flex items-center gap-2 text-xl"><span><FaRust className="text-2xl" /></span>Rust</p>
+          <p className="flex items-center gap-2 text-xl"><span><FaPhp className="text-2xl" /></span>Php</p>
+          <p className="flex items-center gap-2 text-xl"><span><DiRuby className="text-2xl" /></span>Ruby</p>
+          <p className="flex items-center gap-2 text-xl"><span><GrMysql className="text-2xl" /></span>Sql</p>
+        </div>
       </div>
     </>
   )
