@@ -8,11 +8,12 @@ import Room from './pages/room'
 import './App.css'
 import Home from './pages/home'
 
+
 function App() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!document.cookie) {
+    if (!document.cookie.includes("token")) {
       dispatch(logOut())
       return;
     }
