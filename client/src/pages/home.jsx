@@ -23,11 +23,43 @@ import { FaRust } from "react-icons/fa";
 import { FaPhp } from "react-icons/fa";
 import { DiRuby } from "react-icons/di";
 import { GrMysql } from "react-icons/gr";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   console.log(user);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+  const handleLogOut = async() => {
+    try { 
+      const response = await axios.get(import.meta.env.VITE_BACKEND_LOGOUT, {
+        withCredentials: true,
+      });
+      if (response?.data?.success) {
+        navigate("/");
+      }
+
+
+
+    }
+    catch (e) {
+      console.log(e);
+      
+    }
+  }
   return (
     <>
       <div className="max-w-screen w-full h-auto bg-zinc-900">
@@ -94,7 +126,22 @@ export default function Home() {
           <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
             <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Profile Details</p>
             <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Playground</p>
-            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Log Out</p>
+            
+            <AlertDialog>
+              <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Log Out</AlertDialogTrigger>
+              <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-green-400">You want to log out?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-green-700">
+                   Hopefully will see you again
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
+                  <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={handleLogOut }>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
 
           </PopoverContent>
         </Popover> :
@@ -151,20 +198,20 @@ export default function Home() {
       </div>
 
       <footer className="bg-zinc-900 text-green-400 py-8 mt-20 px-4 text-sm flex flex-col md:flex-row items-center justify-between border-t border-green-400">
-  <div className="text-center md:text-left mb-4 md:mb-0">
-    <p>© {new Date().getFullYear()} Code Nimbus — Empowering developers worldwide.</p>
-    <p className="text-xs mt-1 text-green-500">Open-source • Built by the community, for the community</p>
-  </div>
-  
-  <div className="flex flex-col md:flex-row items-center gap-4 " >
-    <a href="https://github.com/RohitDutta-web/CLOUD-IDE" target="_blank" rel="noopener noreferrer" className="hover:underline font-medium">
-      💻 Contribute on GitHub
-    </a>
-    <a href="https://github.com/RohitDutta-web/CLOUD-IDE" className="hover:underline">Documentation</a>
-    <a href="#community" className="hover:underline">Join Community</a>
-    <a href="mailto:duttarohit754@gmail.com" className="hover:underline">Contact</a>
-  </div>
-</footer>
+        <div className="text-center md:text-left mb-4 md:mb-0">
+          <p>© {new Date().getFullYear()} Code Nimbus — Empowering developers worldwide.</p>
+          <p className="text-xs mt-1 text-green-500">Open-source • Built by the community, for the community</p>
+        </div>
+
+        <div className="flex flex-col md:flex-row items-center gap-4 " >
+          <a href="https://github.com/RohitDutta-web/CLOUD-IDE" target="_blank" rel="noopener noreferrer" className="hover:underline font-medium">
+            💻 Contribute on GitHub
+          </a>
+          <a href="https://github.com/RohitDutta-web/CLOUD-IDE" className="hover:underline">Documentation</a>
+          <a href="#community" className="hover:underline">Join Community</a>
+          <a href="mailto:duttarohit754@gmail.com" className="hover:underline">Contact</a>
+        </div>
+      </footer>
 
     </>
   )
