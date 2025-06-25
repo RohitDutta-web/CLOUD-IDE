@@ -4,9 +4,12 @@ import signUpImage from "../assets/Create-new-client-accounts.png";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../utils/userSlice.js";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function UserEntry() {
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -39,19 +42,24 @@ export default function UserEntry() {
           },
           withCredentials: true,
         }
-      )
-
-
-       if (data.response?.data?.success) {
-        dispatch(setUser({
-          email: data.data?.user?.email,
-          username: data.data?.user?.username,
-          isLoggedIn: true,
-          isGuest: false
-        }))
 
         
-      } 
+      )
+      console.log(data);
+
+
+
+     if (data.data?.success) {
+  dispatch(setUser({
+    email: data.data?.user?.email,
+    username: data.data?.user?.username,
+    isLoggedIn: true,
+    isGuest: false
+  }));
+
+  navigate("/");
+}
+
 
 
     }
@@ -88,6 +96,8 @@ export default function UserEntry() {
           "Content-Type": "application/json"
         }
       })
+
+      navigate("/userEntry")
     }
     catch (e) {
       console.log(e);
