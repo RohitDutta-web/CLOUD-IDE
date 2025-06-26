@@ -7,6 +7,7 @@ import { logOut } from './utils/userSlice';
 import Room from './pages/room'
 import './App.css'
 import Home from './pages/home'
+import CodingPlayGround from './pages/codingPlayGround';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path='/playground' element={<Playground />} />
         <Route path='/room/:roomId' element={<Room />} />
         <Route path='/' element={<Home />} />
+        <Route path='/codingPlayGround' element={<CodingPlayGround />} />
       </Routes>
 
     </BrowserRouter>
