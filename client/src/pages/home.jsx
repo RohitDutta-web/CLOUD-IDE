@@ -23,6 +23,7 @@ import { FaRust } from "react-icons/fa";
 import { FaPhp } from "react-icons/fa";
 import { DiRuby } from "react-icons/di";
 import { GrMysql } from "react-icons/gr";
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,9 +40,23 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
-  console.log(user);
+  const [roomId, setRoomId] = useState("");
+  
+  const handleJoinRoom = () => {
+    if (roomId.length < 6) {
+      return alert("Invalid Room id")
+    }
+
+    navigate(`/room/${roomId}`);
+  }
+
+  const roomIdForm = (e) => {
+    setRoomId(e.target.value);
+  }
+
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+
 
   const handleLogOut = async() => {
     try { 
@@ -115,7 +130,21 @@ export default function Home() {
 
         <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
           <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Create room</p>
-          <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Join room</p>
+          <AlertDialog>
+              <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Join Room</AlertDialogTrigger>
+              <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-green-400">Enter room id</AlertDialogTitle>
+                  <AlertDialogDescription className="text-green-700">
+                   <input type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white"  onChange={roomIdForm}  />
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
+                <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={handleJoinRoom }>Join</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
         </PopoverContent>
 
       </Popover>
