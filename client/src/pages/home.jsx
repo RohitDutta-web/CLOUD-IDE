@@ -153,7 +153,7 @@ export default function Home() {
         isLoggedIn ? <Popover >
           <PopoverTrigger className="absolute text-green-400  top-5 right-40  rounded font-bold text-5xl cursor-pointer mr-5"><FaRegUserCircle /></PopoverTrigger>
           <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
-            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Profile Details</p>
+            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={()=> navigate("/details")}>Profile Details</p>
             <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={()=> navigate("/codingPlayGround")}>Playground</p>
             
             <AlertDialog>
