@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../utils/userSlice.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { MdHome } from "react-icons/md";
 
 
 
@@ -173,6 +174,8 @@ export default function UserEntry() {
         </div>
 
       </div>
+
+      <button className="absolute top-2 right-2 pl-3 pr-3 pt-2 pb-2 bg-green-400 rounded font-bold text-2xl hover:bg-green-600 cursor-pointer  text-white hover:text-zinc-200" onClick={() => navigate("/")}><MdHome /></button>
     </>
   )
 }
