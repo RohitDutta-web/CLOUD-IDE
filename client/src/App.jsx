@@ -11,6 +11,7 @@ import CodingPlayGround from './pages/codingPlayGround';
 import UserDetails from './pages/userDetails';
 
 
+
 function App() {
 
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function App() {
         <Route path='/codingPlayGround' element={<CodingPlayGround />} />
         <Route path='/details' element={<UserDetails />} />
       </Routes>
+    
 
     </BrowserRouter>
   )
