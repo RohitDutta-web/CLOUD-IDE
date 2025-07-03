@@ -67,14 +67,11 @@ export default function Home() {
       });
       if (response.data?.success) {
         toast(response.data?.message)
-        navigate("/");
+        navigate("/userEntry");
       }
-
-
-
     }
     catch (e) {
-      console.log(e);
+      toast(e.response?.data?.message);
       
     }
   }

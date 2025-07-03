@@ -44,24 +44,24 @@ export default function UserEntry() {
           withCredentials: true,
         }
 
-        
+
       )
 
 
 
 
-     if (data.data?.success) {
-  dispatch(setUser({
-    email: data.data?.user?.email,
-    username: data.data?.user?.username,
-    isLoggedIn: true,
-    isGuest: false
+      if (data.data?.success) {
+        dispatch(setUser({
+          email: data.data?.user?.email,
+          username: data.data?.user?.username,
+          isLoggedIn: true,
+          isGuest: false
 
-  })
-  );
-toast(data.data?.message);
-  navigate("/");
-}
+        })
+        );
+        toast(data.data?.message);
+        navigate("/");
+      }
 
 
 
@@ -94,13 +94,16 @@ toast(data.data?.message);
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(import.meta.env.VITE_BACKEND_SIGNUP, signUpForm, {
+      let response = await axios.post(import.meta.env.VITE_BACKEND_SIGNUP, signUpForm, {
         headers: {
           "Content-Type": "application/json"
         }
       })
+      if (response.data?.success) {
+        toast(response.data?.message);
 
-      navigate("/userEntry")
+        navigate("/")
+      }
     }
     catch (e) {
       console.log(e);
@@ -143,7 +146,7 @@ toast(data.data?.message);
 
               <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
                 <input placeholder="Email" type="email" name="email" id="email" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={handleLogInForm} value={logInForm.email} />
-                <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="password" onChange={handleLogInForm}  value={logInForm.password}/>
+                <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="password" onChange={handleLogInForm} value={logInForm.password} />
                 <input type="submit" value="Log In" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" onClick={logInHandler} />
               </form>
 
@@ -153,8 +156,8 @@ toast(data.data?.message);
                 <img src={signUpImage} alt="signup" className="w-1/2 " />
 
                 <form action="" className="flex flex-col gap-5 mt-5 w-1/2 items-center  ">
-                  <input placeholder="Username" type="text" name="username" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler}  value={signUpForm.username}/>
-                  <input placeholder="Email" type="email" name="email" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler}  value={signUpForm.email}/>
+                  <input placeholder="Username" type="text" name="username" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler} value={signUpForm.username} />
+                  <input placeholder="Email" type="email" name="email" id="" className=" w-1/2 bg-zinc-700 pl-2 pr-2 pt-1 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" onChange={signUpFormHandler} value={signUpForm.email} />
                   <input placeholder="Password" className="bg-zinc-700 pl-2 pr-2 pt-1 w-1/2 pb-1 font-bold text-zinc-500 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-green-700" type="password" name="password" id="" onChange={signUpFormHandler} value={signUpForm.password} />
                   <input type="submit" value="Sign up" className="w-1/2 bg-green-700 hover:bg-green-500 cursor-pointer hover:outline-2 hover:outline-offset-2 hover:outline-green-500 rounded-full pt-1 pb-1 font-bold" onClick={handleSignUp} />
                 </form>
