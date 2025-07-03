@@ -293,7 +293,7 @@ export const logOut = async (req, res) => {
 
     return res.status(200).json({
       message: "Logout successful",
-      success: false
+      success: true
     })
   }
   catch (e) {

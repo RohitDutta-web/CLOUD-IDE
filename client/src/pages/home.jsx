@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ export default function Home() {
     }
 
     navigate(`/room/${roomId}`);
+    toast(` joined ${roomId} `)
   }
 
   const roomIdForm = (e) => {
@@ -63,7 +65,8 @@ export default function Home() {
       const response = await axios.get(import.meta.env.VITE_BACKEND_LOGOUT, {
         withCredentials: true,
       });
-      if (response?.data?.success) {
+      if (response.data?.success) {
+        toast(response.data?.message)
         navigate("/");
       }
 
