@@ -1,11 +1,13 @@
 import { FaEdit } from "react-icons/fa";
 import { useState } from "react";
 import { GiConfirmed } from "react-icons/gi";
+import { toast } from "sonner";
 
 export default function UserDetails() {
   const [doEdit, setDoEdit] = useState(false);
   const handleDoEdit = () => {
     setDoEdit(!doEdit);
+    toast("Activated");
   }
 
   return (
