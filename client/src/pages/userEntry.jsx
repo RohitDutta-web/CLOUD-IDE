@@ -5,6 +5,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../utils/userSlice.js";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 
 
@@ -32,7 +33,7 @@ export default function UserEntry() {
     e.preventDefault();
 
     try {
-      console.log(logInForm);
+
 
       const data = await axios.post(import.meta.env.VITE_BACKEND_LOGIN, logInForm,
         {
@@ -45,7 +46,7 @@ export default function UserEntry() {
 
         
       )
-      console.log(data);
+
 
 
 
@@ -55,8 +56,10 @@ export default function UserEntry() {
     username: data.data?.user?.username,
     isLoggedIn: true,
     isGuest: false
-  }));
 
+  })
+  );
+toast(data.data?.message);
   navigate("/");
 }
 
