@@ -1,13 +1,16 @@
 import { FaEdit } from "react-icons/fa";
 import { useState } from "react";
 import { GiConfirmed } from "react-icons/gi";
-import { toast } from "sonner";
+import { useSelector } from "react-redux";
+
 
 export default function UserDetails() {
+  const user = useSelector((state) => state.user);
   const [doEdit, setDoEdit] = useState(false);
   const handleDoEdit = () => {
     setDoEdit(!doEdit);
-    toast("Activated");
+    console.log(user);
+    
   }
 
   return (
@@ -21,11 +24,11 @@ export default function UserDetails() {
                }
             
             <div className="group flex items-center  bg-white opacity-75  group-focus-within:shadow-xl p-2 rounded">
-              <input type="text" placeholder={"Your user name"} className="w-[90%] bg-transparent outline-none p-1 focus:shadow-xl" />
+              <input type="text" placeholder={user.username} className="w-[90%] bg-transparent outline-none p-1 focus:shadow-xl" readOnly={!doEdit} />
              
             </div>
             <div className="group flex items-center  bg-white opacity-75  group-focus-within:shadow-xl p-2 rounded">
-              <input type="email" placeholder={"Your email id"} className="w-[90%] bg-transparent outline-none p-1 focus:shadow-xl" />
+              <input type="email" placeholder={user.email} className="w-[90%] bg-transparent outline-none p-1 focus:shadow-xl" readOnly={!doEdit} />
             
             </div>
 

@@ -16,17 +16,17 @@ const userSlice = createSlice({
     setUser(state, action) {
       const { username, email, cookie, isLoggedIn, isGuest } = action.payload;
 
-      state.username = username;
-      state.email = email;
-      state.isLoggedIn = isLoggedIn;
-      state.isGuest = isGuest;
-      state.cookie = cookie;
+      state.username = username,
+      state.email = email,
+      state.isLoggedIn = isLoggedIn,
+      state.isGuest = isGuest,
+      state.cookie = cookie
 
     },
 
     logOut(state) {
-      state.isLoggedIn = false;
-      state.cookie = "";
+      state.isLoggedIn = false,
+      state.cookie = "",
       state.username = "",
         state.email = "",
         state.isGuest = false
