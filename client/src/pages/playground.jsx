@@ -1,8 +1,11 @@
 import Hamburger from 'hamburger-react'
 import { useState } from 'react'
 
+
 export default function Playground() {
+
   const [isOpen, setOpen] = useState(false)
+ 
   return (
     <>
       <div className="w-screen h-screen bg-zinc-800">
