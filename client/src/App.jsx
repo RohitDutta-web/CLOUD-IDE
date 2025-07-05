@@ -12,7 +12,11 @@ import UserDetails from './pages/userDetails';
 
 
 
+
 function App() {
+
+
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -20,9 +24,10 @@ function App() {
       dispatch(logOut())
       return;
     }
+ 
 
     return;
-  },[])
+  },[ ])
 
   return (
     <BrowserRouter>

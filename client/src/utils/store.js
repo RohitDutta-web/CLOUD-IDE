@@ -8,7 +8,15 @@ import userReducer from './userSlice.js';
 const userExpireTransform = expireInTransform({
   expireKey: import.meta.env.VITE_REDUX_EXPIRE_KEY,
   expireSeconds: 86400,
-  autoExpire: true,
+   expiredState: {
+    username: '',
+    email: '',
+    cookie: '',
+    isLoggedIn: false,
+    isGuest: false
+  },
+  autoExpire: true
+
 });
 
 const userPersistConfig = {
