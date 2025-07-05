@@ -9,6 +9,7 @@ import './App.css'
 import Home from './pages/home'
 import CodingPlayGround from './pages/codingPlayGround';
 import UserDetails from './pages/userDetails';
+import ProtectedRoute from './security/protectedRoute';
 
 
 
@@ -24,22 +25,35 @@ function App() {
       dispatch(logOut())
       return;
     }
- 
+
 
     return;
-  },[ ])
+  }, [])
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/userEntry' element={<UserEntry />} />
-        <Route path='/playground' element={<Playground />} />
-        <Route path='/room/:roomId' element={<Room />} />
+        <Route path='/playground' element={
+          <ProtectedRoute>
+            <Playground />
+          </ProtectedRoute>
+
+        } />
+        <Route path='/room/:roomId' element={
+          <ProtectedRoute>
+            <Room />
+          </ProtectedRoute>} />
         <Route path='/' element={<Home />} />
-        <Route path='/codingPlayGround' element={<CodingPlayGround />} />
-        <Route path='/details' element={<UserDetails />} />
+        <Route path='/codingPlayGround' element={
+          <ProtectedRoute>
+          <CodingPlayGround />
+        </ProtectedRoute>} />
+        <Route path='/details' element={<ProtectedRoute>
+          <UserDetails />
+        </ProtectedRoute>} />
       </Routes>
-    
+
 
     </BrowserRouter>
   )

@@ -44,8 +44,11 @@ export default function Home() {
   const [roomId, setRoomId] = useState("");
   
   const handleJoinRoom = () => {
+    if (!document.cookie) {
+      return toast("PLease login first")
+     }
     if (roomId.length < 6) {
-      return alert("Invalid Room id")
+      return toast("Invalid Room id")
     }
 
     navigate(`/room/${roomId}`);
