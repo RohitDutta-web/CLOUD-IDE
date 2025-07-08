@@ -21,7 +21,7 @@ function App() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!document.cookie.includes("token")) {
+    if (!document.cookie) {
       dispatch(logOut())
       return;
     }

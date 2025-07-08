@@ -1,50 +1,25 @@
-
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./userSlice.js";
+import { persistStore, persistReducer } from "redux-persist";
 import storage from 'redux-persist/lib/storage';
-import expireInTransform from "redux-persist-transform-expire-in";
-import userReducer from './userSlice.js';
 
-const userExpireTransform = expireInTransform({
-  expireKey: import.meta.env.VITE_REDUX_EXPIRE_KEY,
-  expireSeconds: 86400,
-   expiredState: {
-    username: '',
-    email: '',
-    cookie: '',
-    isLoggedIn: false,
-    isGuest: false
-  },
-  autoExpire: true
 
-});
-
-const userPersistConfig = {
-  key: 'user',
+const persistConfig = {
+  key: "root",
   storage,
-  transforms: [userExpireTransform],
+  whitelist: ['user', 'isLoggedIn' ]
 };
 
-const rootReducer = combineReducers({
-  user: persistReducer(userPersistConfig, userReducer),
 
-});
 
-const persistedReducer = persistReducer(
-  {
-    key: 'root',
-    storage,
-    whitelist: ['user'], 
-  },
-  rootReducer
-);
+const persistedUserReducer = persistReducer(persistConfig, userReducer);
+
 
 export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
-});
+  reducer: {
+    user: persistedUserReducer,
+
+  }
+})
 
 export const persistor = persistStore(store);

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import signUpImage from "../assets/Create-new-client-accounts.png";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUser } from "../utils/userSlice.js";
+import { setUser, setIsLoggedIn } from "../utils/userSlice.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { MdHome } from "react-icons/md";
@@ -52,15 +52,13 @@ export default function UserEntry() {
 
 
       if (data.data?.success) {
-        dispatch(setUser({
-          email: data.data?.user?.email,
-          username: data.data?.user?.username,
-          isLoggedIn: true,
-          isGuest: false
+        dispatch(setIsLoggedIn(true))
+        dispatch(setUser(data.data.user)
 
-        })
+
         );
         toast(data.data?.message);
+
         navigate("/");
       }
 
