@@ -9,11 +9,10 @@ export default function UserDetails() {
   const [doEdit, setDoEdit] = useState(false);
   const handleDoEdit = () => {
     setDoEdit(!doEdit);
-    console.log(user);
+   
     
   }
 
-  console.log(user);
   
   
   

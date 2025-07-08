@@ -19,10 +19,13 @@ export const userSlice = createSlice({
     logOut(state) {
       state.user = null;
       state.isLoggedIn = false;
-     }
+    },
+    verified(state, action) { 
+      state.user.user.verification = action.payload
+    }
   }
 })
 
-export const { setUser,setIsLoggedIn, logOut } = userSlice.actions
+export const { setUser,setIsLoggedIn, logOut, verified } = userSlice.actions
 export default userSlice.reducer
 
