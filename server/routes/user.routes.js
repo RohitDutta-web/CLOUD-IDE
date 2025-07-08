@@ -1,4 +1,4 @@
-import { register, logIn, guestLogIn, updateUser, verifyEmail, sentVerificationMail, logOut } from "../controllers/user.controller.js";
+import { register, logIn, guestLogIn, updateUser, verifyEmail, sentVerificationMail, logOut, gitHub, linkedIn } from "../controllers/user.controller.js";
 import userAuthentication from "../middlewares/auth.middleware.js";
 import express from "express";
 
@@ -11,6 +11,8 @@ router.put("/update", userAuthentication,  updateUser);
 router.get("/verification", userAuthentication, sentVerificationMail);
 router.get("/emailVerification/:id", verifyEmail);
 router.get("/logOut", userAuthentication, logOut);
+router.post("/gitHub", userAuthentication, gitHub);
+router.post("/linkedIn", userAuthentication, linkedIn);
 
 
 export default router;

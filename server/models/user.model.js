@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
   emailVerified: {
     type: Boolean,
     default: false,
+  },
+  gitHub: {
+    type: String
+  },
+  linkedIn: {
+    type: String
   }
 }, { timestamps: true })
 

@@ -43,7 +43,7 @@ export default function UserDetails() {
         <div className="w-[90%] flex flex-col gap-5 ">
           <div className="border-green-400 border-2 flex">
             <input type="email" placeholder={user.email} className="w-[90%] p-2 text-white bg-transparent  outline-none" />
-            <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer">{user.verification ? "Verified":"Verify" }</button>
+            <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer" style={{cursor: "blocked"}}>{user.verification ? "Verified":"Verify" }</button>
           </div>
           <div className="border-green-400 border-2 flex">
             <input type="text" placeholder="LinkedIn URL"  className="w-[90%] p-2 text-white bg-transparent outline-none"/>

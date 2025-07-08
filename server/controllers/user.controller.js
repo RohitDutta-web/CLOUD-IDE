@@ -102,7 +102,9 @@ export const logIn = async (req, res) => {
           email: user.email,
           guest: user.guest,
           username: user.username,
-          verification: user.emailVerified
+          verification: user.emailVerified,
+          gitHub: user.gitHub,
+          linkedIn: user.linkedIn
         }
       })
 
@@ -295,6 +297,64 @@ export const logOut = async (req, res) => {
       message: "Logout successful",
       success: true
     })
+  }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false
+    })
+  }
+}
+
+
+export const gitHub = async (req, res) => {
+  try {
+    const url = req.body;
+    const tokenId = req.id;
+    const user = await User.findById(tokenId)
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid user",
+        success: false
+      })
+    }
+
+    user.gitHub = url;
+    user.save();
+    return res.status(200).json({
+      message: "Github Account updated",
+      success: true
+    })
+
+  }
+  catch (e) {
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false
+    })
+  }
+}
+
+
+export const linkedIn = async (req, res) => {
+  try {
+    const url = req.body;
+    const tokenId = req.id;
+    const user = await User.findById(tokenId)
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid user",
+        success: false
+      })
+    }
+
+    user.linkedIn = url;
+    user.save();
+    return res.status(200).json({
+      message: "LinkedIn Account updated",
+      success: true
+    })
+
   }
   catch (e) {
     return res.status(500).json({
