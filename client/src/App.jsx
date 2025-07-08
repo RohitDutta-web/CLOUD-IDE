@@ -10,6 +10,7 @@ import Home from './pages/home'
 import CodingPlayGround from './pages/codingPlayGround';
 import UserDetails from './pages/userDetails';
 import ProtectedRoute from './security/protectedRoute';
+import VerificationPop from './components/verificationPop';
 
 
 
@@ -21,7 +22,7 @@ function App() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!document.cookie) {
+    if (!document.cookie.includes("token")) {
       dispatch(logOut())
       return;
     }
@@ -53,6 +54,8 @@ function App() {
           <UserDetails />
         </ProtectedRoute>} />
       </Routes>
+
+      <VerificationPop/>
 
 
     </BrowserRouter>
