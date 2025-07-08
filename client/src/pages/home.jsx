@@ -61,6 +61,9 @@ export default function Home() {
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
+  console.log(isLoggedIn);
+  
+
 
 
   const handleLogOut = async() => {

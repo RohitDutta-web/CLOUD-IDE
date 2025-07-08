@@ -5,13 +5,18 @@ import { useSelector } from "react-redux";
 
 
 export default function UserDetails() {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
   const [doEdit, setDoEdit] = useState(false);
   const handleDoEdit = () => {
     setDoEdit(!doEdit);
     console.log(user);
     
   }
+
+  console.log(user);
+  
+  
+  
 
   return (
     <>
