@@ -115,7 +115,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/user", userRouter);
 
 
-
 const port = process.env.PORT;
 server.listen(port, () => {
   console.log("Server is live");

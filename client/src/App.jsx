@@ -10,7 +10,7 @@ import Home from './pages/home'
 import CodingPlayGround from './pages/codingPlayGround';
 import UserDetails from './pages/userDetails';
 import ProtectedRoute from './security/protectedRoute';
-import VerificationPop from './components/verificationPop';
+
 
 
 
@@ -55,7 +55,7 @@ function App() {
         </ProtectedRoute>} />
       </Routes>
 
-      <VerificationPop/>
+ 
 
 
     </BrowserRouter>
