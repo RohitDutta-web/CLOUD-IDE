@@ -350,7 +350,7 @@ export const linkedIn = async (req, res) => {
     }
 
     user.linkedIn = url;
-    user.save();
+    await user.save();
     return res.status(200).json({
       message: "LinkedIn Account updated",
       success: true
