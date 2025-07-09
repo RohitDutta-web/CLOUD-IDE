@@ -53,7 +53,7 @@ export default function UserEntry() {
 
       if (data.data?.success) {
         dispatch(setIsLoggedIn(true))
-        dispatch(setUser(data.data.user)
+        dispatch(setUser(data.data?.user)
 
 
         );
