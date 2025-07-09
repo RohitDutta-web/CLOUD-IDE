@@ -10,6 +10,29 @@ export default function UserDetails() {
   const user = useSelector((state) => state.user.user);
   const [doEdit, setDoEdit] = useState(false);
   const [gitHubUrl, setGitHubUrl] = useState();
+  const [linkedInUrl, setLinkedInUrl] = useState();
+   const handleLinkedInEntry = (e) => {
+    setLinkedInUrl(e.target.value);
+  }
+   const handleLinkedIn = async () => {
+
+    
+    try {
+          
+      const response = await axios.post(import.meta.env.VITE_LINKEDIN, { url: linkedInUrl }, {
+        withCredentials: true
+      })
+
+      if (response.data?.success) {
+        toast(response.data?.message);
+      }
+     }
+    catch (e) {
+      console.log(e);
+      
+    }
+  }
+  
   const handleGitHubEntry = (e) => {
     setGitHubUrl(e.target.value);
   }
@@ -68,8 +91,8 @@ export default function UserDetails() {
             <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer" style={{cursor: "blocked"}}>{user.verification ? "Verified":"Verify" }</button>
           </div>
           <div className="border-green-400 border-2 flex">
-            <input type="text" placeholder="LinkedIn URL"  className="w-[90%] p-2 text-white bg-transparent outline-none"/>
-            <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer">Modify</button>
+            <input type="text" placeholder="LinkedIn URL"  className="w-[90%] p-2 text-white bg-transparent outline-none" onChange={handleLinkedInEntry}/>
+            <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer" onClick={handleLinkedIn} >Modify</button>
           </div>
           <div className="border-green-400 border-2 flex">
             <input type="text" placeholder="Github URL"  className="w-[90%] p-2 text-white bg-transparent outline-none" onChange={handleGitHubEntry}/>
