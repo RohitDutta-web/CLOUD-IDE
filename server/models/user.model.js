@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   gitHub: {
-    type: String
+    type: String,
   },
   linkedIn: {
     type: String

@@ -2,17 +2,39 @@ import { FaEdit } from "react-icons/fa";
 import { useState } from "react";
 import { GiConfirmed } from "react-icons/gi";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import axios from "axios";
 
 
 export default function UserDetails() {
   const user = useSelector((state) => state.user.user);
   const [doEdit, setDoEdit] = useState(false);
+  const [gitHubUrl, setGitHubUrl] = useState();
+  const handleGitHubEntry = (e) => {
+    setGitHubUrl(e.target.value);
+  }
   const handleDoEdit = () => {
     setDoEdit(!doEdit);
-   
-    
   }
 
+  const handleGitHub = async () => {
+
+    
+    try {
+          
+      const response = await axios.post(import.meta.env.VITE_GITHUB, { url: gitHubUrl }, {
+        withCredentials: true
+      })
+
+      if (response.data?.success) {
+        toast(response.data?.message);
+      }
+     }
+    catch (e) {
+      console.log(e);
+      
+    }
+  }
   
   
   
@@ -50,8 +72,8 @@ export default function UserDetails() {
             <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer">Modify</button>
           </div>
           <div className="border-green-400 border-2 flex">
-            <input type="text" placeholder="Github URL"  className="w-[90%] p-2 text-white bg-transparent outline-none"/>
-            <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer">Modify</button>
+            <input type="text" placeholder="Github URL"  className="w-[90%] p-2 text-white bg-transparent outline-none" onChange={handleGitHubEntry}/>
+            <button className="bg-green-400 font-bold pl-5 pr-5 pt-2 pb-2 cursor-pointer" onClick={handleGitHub}>Modify</button>
           </div>
         </div>
       </div>

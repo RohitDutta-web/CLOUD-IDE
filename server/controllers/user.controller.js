@@ -309,7 +309,7 @@ export const logOut = async (req, res) => {
 
 export const gitHub = async (req, res) => {
   try {
-    const url = req.body;
+    const {url} = req.body;
     const tokenId = req.id;
     const user = await User.findById(tokenId)
     if (!user) {
@@ -320,7 +320,8 @@ export const gitHub = async (req, res) => {
     }
 
     user.gitHub = url;
-    user.save();
+    await user.save();
+    
     return res.status(200).json({
       message: "Github Account updated",
       success: true
@@ -338,7 +339,7 @@ export const gitHub = async (req, res) => {
 
 export const linkedIn = async (req, res) => {
   try {
-    const url = req.body;
+    const {url} = req.body;
     const tokenId = req.id;
     const user = await User.findById(tokenId)
     if (!user) {
