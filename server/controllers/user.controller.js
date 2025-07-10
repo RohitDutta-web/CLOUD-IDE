@@ -9,12 +9,12 @@ dotenv.config({})
 //user registration
 export const register = async (req, res) => {
   try {
-   
-    
+
+
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
 
-      
+
       return res.status(400).json({ message: "Missing credentials", success: false });
     }
 
@@ -28,7 +28,7 @@ export const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    
+
     await User.create({
       username,
       email,
@@ -44,7 +44,7 @@ export const register = async (req, res) => {
     })
   }
   catch (e) {
-    
+
     return res.status(500).json({
       message: "Internal server error",
       success: false
@@ -165,7 +165,7 @@ export const guestLogIn = async (req, res) => {
 //update user details with password verification
 export const updateUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body
+    const { username, email } = req.body
     const id = req.id
     const user = await User.findById(id)
 
@@ -175,20 +175,22 @@ export const updateUser = async (req, res) => {
         success: false
       })
     }
-    const passwordVerification = await bcrypt.compare(password, user.password);
-    if (!passwordVerification) {
-      return res.status(400).json({
-        message: "Invalid password or username",
-        success: false
-      })
-    }
+
     user.username = username
     user.email = email
     user.save();
 
     return res.status(200).json({
       message: "User info updated",
-      success: true
+      success: true,
+      user: {
+        username: user.username,
+        email: user.email,
+        linkedIn: user.linkedIn,
+        gitHub: user.gitHub,
+        verification: user.emailVerified,
+        guest: user.guest,
+      }
     })
   }
   catch (e) {
@@ -309,7 +311,7 @@ export const logOut = async (req, res) => {
 
 export const gitHub = async (req, res) => {
   try {
-    const {url} = req.body;
+    const { url } = req.body;
     const tokenId = req.id;
     const user = await User.findById(tokenId)
     if (!user) {
@@ -321,7 +323,7 @@ export const gitHub = async (req, res) => {
 
     user.gitHub = url;
     await user.save();
-    
+
     return res.status(200).json({
       message: "Github Account updated",
       success: true
@@ -339,7 +341,7 @@ export const gitHub = async (req, res) => {
 
 export const linkedIn = async (req, res) => {
   try {
-    const {url} = req.body;
+    const { url } = req.body;
     const tokenId = req.id;
     const user = await User.findById(tokenId)
     if (!user) {
