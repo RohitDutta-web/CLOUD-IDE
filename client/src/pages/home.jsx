@@ -135,7 +135,21 @@ export default function Home() {
         <PopoverTrigger className="absolute hover:outline-2 hover:outline-offset-2 hover:outline-green-300 top-5 right-5 bg-green-700 rounded font-bold text-xl cursor-pointer text-white hover:bg-green-500 pl-7 pr-7 pt-2 pb-2 flex items-center justify-center gap-2"> <FaLaptopHouse /> Room </PopoverTrigger>
 
         <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
-          <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center">Create room</p>
+          <AlertDialog>
+              <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Create room</AlertDialogTrigger>
+              <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-green-400">Enter a room id or click create a default named room</AlertDialogTitle>
+                  <AlertDialogDescription className="text-green-700">
+                   <input type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white"   />
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
+                <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" >Create</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           <AlertDialog>
               <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Join Room</AlertDialogTrigger>
               <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
