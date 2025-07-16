@@ -5,12 +5,13 @@ import XTerminal from '../components/terminal';
 import { useParams } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
 import io from "socket.io-client";
-const socket = io( "http://localhost:3000", {
+const socket = io( import.meta.env.VITE_BACKEND_URL, {
   withCredentials: true,
   transports: ['websocket'],
 });
 
 export default function Room() {
+   const { roomId } = useParams();
 
   const isRendered = useRef(false);
 
@@ -28,7 +29,12 @@ export default function Room() {
       
     })
 
-  }, [])
+    socket.emit("join-room", roomId, () => {
+      console.log(`Joined room: ${roomId}`);
+      
+    });
+
+  }, [isRendered , roomId])
 
 
   const messages = [
@@ -62,7 +68,7 @@ export default function Room() {
       message: "Hello",
     }
   ]
-  const { roomId } = useParams();
+ 
   const [code, setCode] = useState(
     `function add(a, b) {\n  return a + b;\n}`
   );

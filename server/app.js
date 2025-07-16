@@ -12,6 +12,7 @@ import { createRoomContainer, createUSerContainer } from "./utils/dockerManager.
 import jwt from "jsonwebtoken";
 import cookie from 'cookie';
 import pty from "node-pty";
+import path from "path";
 
 
 
@@ -66,13 +67,13 @@ io.on('connection', (socket) => {
     createRoomContainer(roomId)
     userSocketMap.set(userId, socket.id);
     socket.to(roomId).emit('user-joined', { userId });
-
+    
 
       ptyProcess = pty.spawn(shell, [], {
       name: 'xterm-color',
       cols: 80,
       rows: 24,
-      cwd: path.resolve(process.env.HOME || '/home'),
+      cwd: path.resolve(process.env.HOME || '/Home'),
       env: process.env,
       });
     
