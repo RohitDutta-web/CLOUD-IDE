@@ -2,7 +2,8 @@
 
 FROM node:18
 
-RUN apt update && apt install -y bash git nano
+RUN apt update && apt install -y bash
+
 
 WORKDIR /workspace
 

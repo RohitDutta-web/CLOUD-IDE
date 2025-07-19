@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
   const userId = socket.userId;
   createUSerContainer(userId);
   console.log("User connected with socketID " + socket.id);
-  const shell = 'bash';
+  const shell = process.platform === 'win32' ? 'wsl.exe' : 'bash';;
   let ptyProcess;
 
   socket.on("join-room", (roomId) => {
@@ -67,7 +67,6 @@ io.on('connection', (socket) => {
     createRoomContainer(roomId)
     userSocketMap.set(userId, socket.id);
     socket.to(roomId).emit('user-joined', { userId });
-    
 
       ptyProcess = pty.spawn(shell, [], {
       name: 'xterm-color',
