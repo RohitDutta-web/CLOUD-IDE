@@ -153,7 +153,7 @@ export default function Room() {
           </div>
 
         </div>
-        <div id='terminal' className='h-[33%] overflow-auto mt-3'> <XTerminal /></div>
+        <div id='terminal' className='h-[33%] overflow-auto mt-3 w-[100%]'> <XTerminal /></div>
 
       </div>
 
