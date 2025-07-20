@@ -1,7 +1,6 @@
-import { useState  } from 'react';
+import { useState } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { IoMdChatboxes } from "react-icons/io";
-import XTerminal from '../components/terminal';
 import { useParams } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
 
@@ -9,9 +8,9 @@ import { CiPlay1 } from "react-icons/ci";
 
 
 export default function Room() {
-   const { roomId } = useParams();
+  const { roomId } = useParams();
 
- 
+
 
 
   const messages = [
@@ -45,7 +44,7 @@ export default function Room() {
       message: "Hello",
     }
   ]
- 
+
   const [code, setCode] = useState(
     `function add(a, b) {\n  return a + b;\n}`
   );
@@ -97,7 +96,7 @@ export default function Room() {
   return (
     <>
       <div className='w-full max-w-screen h-screen bg-zinc-800' >
-        <div className='w-full h-[65%] bg-zinc-900 flex'>
+        <div className='w-full h-[100%] bg-zinc-900 flex'>
           <CodeEditor
             className='h-[85%] w-[90%]'
             value={code}
@@ -130,20 +129,10 @@ export default function Room() {
           </div>
 
         </div>
-        <div id='terminal' className='h-[33%] overflow-auto mt-3 w-[100%] flex'>
-        
-          
-            <div>
-              <p>Output</p>
-              <button><CiPlay1 /></button>
-            </div>
-            <div>
-              <textarea  id="output-line"></textarea>
-            </div>
-          </div>
-        </div>
 
-   
+      </div>
+
+
 
       <select onChange={(e) => handleCodeLan(e)} className="absolute top-2 left-2 text-white cursor-pointer outline-2 p-2 rounded-xl" >
         <option className='bg-zinc-700  cursor-pointer' value="js">JavaScript</option>
@@ -185,6 +174,22 @@ export default function Room() {
             </div>
           </div>) : null
       }
+
+
+
+      <div id='output' className='overflow-auto mt-3 w-[100%] flex flex-col fixed bottom-0 bg-zinc-900 p-2 border-2'>
+
+
+        <div className='flex justify-between items-center w-full mb-2 mt-2'>
+          <p className='text-center text-green-500 '>Output</p>
+          <button className='text-green-400 border border-green-400 px-4 py-2 rounded  cursor-pointer mr-5'>
+            <CiPlay1 />
+          </button>
+        </div>
+        <div>
+          <textarea id="output-line"></textarea>
+        </div>
+      </div>
     </>
   )
 }
