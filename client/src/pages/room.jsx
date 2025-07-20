@@ -1,40 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState  } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { IoMdChatboxes } from "react-icons/io";
 import XTerminal from '../components/terminal';
 import { useParams } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
-import io from "socket.io-client";
-const socket = io( import.meta.env.VITE_BACKEND_URL, {
-  withCredentials: true,
-  transports: ['websocket'],
-});
+
+import { CiPlay1 } from "react-icons/ci";
+
 
 export default function Room() {
    const { roomId } = useParams();
 
-  const isRendered = useRef(false);
-
-  useEffect(() => {
-    
-    if (isRendered.current) return;
-    isRendered.current = true;
-
-    socket.on("connect", () => {
-      console.log(`Socket has been connected `);
-    })
-
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected!");
-      
-    })
-
-    socket.emit("join-room", roomId, () => {
-      console.log(`Joined room: ${roomId}`);
-      
-    });
-
-  }, [isRendered , roomId])
+ 
 
 
   const messages = [
@@ -153,9 +130,20 @@ export default function Room() {
           </div>
 
         </div>
-        <div id='terminal' className='h-[33%] overflow-auto mt-3 w-[100%]'> <XTerminal /></div>
+        <div id='terminal' className='h-[33%] overflow-auto mt-3 w-[100%] flex'>
+        
+          
+            <div>
+              <p>Output</p>
+              <button><CiPlay1 /></button>
+            </div>
+            <div>
+              <textarea  id="output-line"></textarea>
+            </div>
+          </div>
+        </div>
 
-      </div>
+   
 
       <select onChange={(e) => handleCodeLan(e)} className="absolute top-2 left-2 text-white cursor-pointer outline-2 p-2 rounded-xl" >
         <option className='bg-zinc-700  cursor-pointer' value="js">JavaScript</option>

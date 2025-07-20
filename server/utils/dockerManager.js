@@ -48,6 +48,7 @@ export const createRoomContainer = async (roomId ) => {
     },
   })
 
+  
   await container.start();
   return container.id;
 }
