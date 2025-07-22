@@ -13,6 +13,11 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import io from "socket.io-client";
+
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  withCredentials: true,
+});
 
 
 import { CiPlay1 } from "react-icons/ci";
