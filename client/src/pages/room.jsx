@@ -3,6 +3,17 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import { IoMdChatboxes } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+
 
 import { CiPlay1 } from "react-icons/ci";
 
@@ -124,6 +135,25 @@ export default function Room() {
             </div>
             <IoMdChatboxes className='cursor-pointer hover:text-white  absolute top-[58%] text-zinc-300 text-4xl' onClick={handleChatBox} />
 
+            <Drawer>
+              <DrawerTrigger><button className='text-green-400 border border-green-400 px-4 py-2 rounded  cursor-pointer '>
+                <CiPlay1 />
+              </button></DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                  <DrawerDescription>This action cannot be undone.</DrawerDescription>
+                </DrawerHeader>
+                <DrawerFooter>
+
+                  <DrawerClose>
+                    <button className='text-green-400 border border-green-400 px-4 py-2 rounded  cursor-pointer '>Close</button>
+
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+
 
 
           </div>
@@ -177,19 +207,7 @@ export default function Room() {
 
 
 
-      <div id='output' className='overflow-auto mt-3 w-[100%] flex flex-col fixed bottom-0 bg-zinc-900 p-2 border-2'>
 
-
-        <div className='flex justify-between items-center w-full mb-2 mt-2'>
-          <p className='text-center text-green-500 '>Output</p>
-          <button className='text-green-400 border border-green-400 px-4 py-2 rounded  cursor-pointer mr-5'>
-            <CiPlay1 />
-          </button>
-        </div>
-        <div>
-          <textarea id="output-line"></textarea>
-        </div>
-      </div>
     </>
   )
 }
