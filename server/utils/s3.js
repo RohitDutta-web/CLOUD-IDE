@@ -1,52 +1,51 @@
-import AWS from "aws-sdk";
-
+import { S3Client, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
-dotenv.config()
+import { lookup as mimeLookup } from "mime-types";
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+dotenv.config();
+
+const s3 = new S3Client({
   region: process.env.AWS_REGION,
-})
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }
+});
 
-const BUCKET = process.env.AWS_BUCKET_NAME
-
+const BUCKET = process.env.AWS_BUCKET_NAME;
 
 export const uploadFile = async (key, content) => {
-  const params = {
-    Bucket: BUCKET,
-    Key: key,
-    Body: content,
-    ContentType: "text/plain"
-  }
-
-   try {
-    // Check if the file exists
-    await s3.headObject({ Bucket: BUCKET, Key: key }).promise();
-    console.log("File exists. It will be overwritten.");
+  try {
+    // Check if file exists
+    await s3.send(new HeadObjectCommand({ Bucket: BUCKET, Key: key }));
+    console.log(`File "${key}" already exists. It will be replaced.`);
   } catch (err) {
-    if (err.code === "NotFound") {
-      console.log("File does not exist. It will be created.");
+    if (err.name === 'NotFound') {
+      console.log(`File "${key}" does not exist. Creating a new one.`);
     } else {
-      // Some other error (like permissions)
-      console.error("Error checking file existence:", err);
+      console.error("Error checking file:", err);
       throw err;
     }
   }
+const contentType = mimeLookup(key) || "application/octet-stream";
+  // Upload or replace the file
+const uploadParams = {
+  Bucket: BUCKET,
+  Key: key,
+  Body: content,
+  ContentType: contentType
+};
 
+  await s3.send(new PutObjectCommand(uploadParams));
 
-  await s3.upload(params).promise(); // as s3 automatically overwrite uploaded file
   return `https://${BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-}
+};
 
 export const deleteCodeFile = async (key) => {
-  const params = {
+  const deleteParams = {
     Bucket: BUCKET,
     Key: key
+  };
 
-  }
-
-  await s3.deleteObject(params).promise();
-  return console.log("File erased!");
-  
-}
+  await s3.send(new DeleteObjectCommand(deleteParams));
+};
