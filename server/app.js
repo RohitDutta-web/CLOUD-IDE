@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('receive-message', { message, sender });
    });
   
-  socket.on("run-code", ({ code, language }) => {
+  socket.on("run-code", ({ code, language, fileExtension }) => {
     
   })
 
