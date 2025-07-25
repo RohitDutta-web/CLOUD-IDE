@@ -96,8 +96,10 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('receive-message', { message, sender });
    });
   
-  socket.on("run-code", ({ code, language, fileExtension }) => {
-    
+  socket.on("run-code", async ({ code, language, fileExtension, roomId }) => {
+    const fileName = `${roomId}.${fileExtension}`
+    const s3Url = await uploadFile(fileName, code);
+    if(s3Url) { socket.emit("File is ready to execute!")}
   })
 
   
