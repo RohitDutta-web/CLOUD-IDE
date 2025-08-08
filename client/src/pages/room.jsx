@@ -80,6 +80,21 @@ export default function Room() {
   const [language, setLanguage] = useState(defaultLang);
   const [chatBox, setChatBox] = useState(false);
 
+  const handleRunCode = async () => {
+    try {
+      socket.emit("run-code", {
+        code,
+        language,
+        fileExtension,
+        roomId
+
+      })
+     }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
   const messages = [
     { sender: "Rohit", message: "Hello" },
     { sender: "Jiju", message: "Hello" },
