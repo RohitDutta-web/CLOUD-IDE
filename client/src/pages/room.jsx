@@ -15,15 +15,69 @@ import {
 } from "@/components/ui/drawer";
 import io from "socket.io-client";
 
+// Socket setup
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
   withCredentials: true,
 });
 
+// Language definitions
+const codingLanguages = {
+  js: {
+    name: "JavaScript",
+    extension: "js",
+    template: `function add(a, b) {\n  return a + b;\n}`,
+  },
+  c: {
+    name: "C",
+    extension: "c",
+    template: `int add(int a, int b) {\n  return a + b;\n}`,
+  },
+  java: {
+    name: "Java",
+    extension: "java",
+    template: `public class Main {\n  public static int add(int a, int b) {\n    return a + b;\n  }\n}`,
+  },
+  python: {
+    name: "Python",
+    extension: "py",
+    template: `def add(a, b):\n    return a + b`,
+  },
+  go: {
+    name: "Go",
+    extension: "go",
+    template: `func add(a int, b int) int {\n  return a + b\n}`,
+  },
+  rust: {
+    name: "Rust",
+    extension: "rs",
+    template: `fn add(a: i32, b: i32) -> i32 {\n    a + b\n}`,
+  },
+  php: {
+    name: "PHP",
+    extension: "php",
+    template: `function add($a, $b) {\n  return $a + $b;\n}`,
+  },
+  ruby: {
+    name: "Ruby",
+    extension: "rb",
+    template: `def add(a, b)\n  a + b\nend`,
+  },
+  sql: {
+    name: "SQL",
+    extension: "sql",
+    template: `CREATE FUNCTION add(a INT, b INT)\nRETURNS INT\nDETERMINISTIC\nRETURN a + b;`,
+  },
+};
+
 export default function Room() {
   const { roomId } = useParams();
-  const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
-  const [fileExtension, setFileExtension] = useState("js");
-  const [language, setLanguage] = useState("js");
+
+  const defaultLang = "js";
+  const { template, extension } = codingLanguages[defaultLang];
+
+  const [code, setCode] = useState(template);
+  const [fileExtension, setFileExtension] = useState(extension);
+  const [language, setLanguage] = useState(defaultLang);
   const [chatBox, setChatBox] = useState(false);
 
   const messages = [
@@ -41,29 +95,13 @@ export default function Room() {
 
   const handleCodeLan = (e) => {
     const selectedLang = e.target.value;
-    setLanguage(selectedLang);
+    const langData = codingLanguages[selectedLang];
 
-    const codeTemplates = {
-      js: [`function add(a, b) {\n  return a + b;\n}`, "js"],
-      c: [`int add(int a, int b) {\n  return a + b;\n}`, "c"],
-      java: [
-        `public class Main {\n  public static int add(int a, int b) {\n    return a + b;\n  }\n}`,
-        "java",
-      ],
-      python: [`def add(a, b):\n    return a + b`, "py"],
-      go: [`func add(a int, b int) int {\n  return a + b\n}`, "go"],
-      rust: [`fn add(a: i32, b: i32) -> i32 {\n    a + b\n}`, "rs"],
-      php: [`function add($a, $b) {\n  return $a + $b;\n}`, "php"],
-      ruby: [`def add(a, b)\n  a + b\nend`, "rb"],
-      sql: [
-        `CREATE FUNCTION add(a INT, b INT)\nRETURNS INT\nDETERMINISTIC\nRETURN a + b;`,
-        "sql",
-      ],
-    };
-
-    const [newCode, extension] = codeTemplates[selectedLang] || ["", ""];
-    setCode(newCode);
-    setFileExtension(extension);
+    if (langData) {
+      setLanguage(selectedLang);
+      setCode(langData.template);
+      setFileExtension(langData.extension);
+    }
   };
 
   return (
@@ -124,20 +162,11 @@ export default function Room() {
       <select
         onChange={handleCodeLan}
         className="absolute top-2 left-2 text-white bg-zinc-700 p-2 rounded-xl cursor-pointer"
+        value={language}
       >
-        {Object.keys({
-          js: "JavaScript",
-          c: "C",
-          java: "Java",
-          python: "Python",
-          go: "Go",
-          rust: "Rust",
-          php: "PHP",
-          ruby: "Ruby",
-          sql: "SQL",
-        }).map((lang) => (
-          <option key={lang} value={lang}>
-            {lang.charAt(0).toUpperCase() + lang.slice(1)}
+        {Object.entries(codingLanguages).map(([key, { name }]) => (
+          <option key={key} value={key}>
+            {name}
           </option>
         ))}
       </select>
