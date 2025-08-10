@@ -42,19 +42,32 @@ const languageDockerConfig = {
 };
 
 
-export const langContainer = async (language) => {
+export const langContainer = async (language, roomId) => {
   const config = languageDockerConfig[language];
-  
-  const container = await docker.createContainer({
-  Image: config.image,
-  Cmd:config.cmd,
-  Tty: false,
-  HostConfig: {
-    AutoRemove: true,
-    Binds: [`/host/temp/folder:/app`],
-  },
-  WorkingDir: '/app',
-});
-await container.start();
+  const containerName = `${roomId}_${language}_container`
+  let container;
+
+  const dockerContainers = await docker.listContainers({ all: true });
+  const existing = dockerContainers.find(c => c.Names.includes(`/${containerName}`));
+  if (existing) {
+    container = docker.getContainer(existing.Id);
+  } else {
+    container = await docker.createContainer({
+      Image: config.image,
+      name: containerName,
+      Cmd: config.cmd,
+      Tty: false,
+      HostConfig: {
+        AutoRemove: true,
+        Binds: [`/host/temp/${roomId}:/app`],
+      },
+      WorkingDir: '/app',
+    });
+  }
+
+  if (existing && existing.State !== "running") {
+  await container.start();
+}
+
 
 }
