@@ -38,10 +38,25 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import io from "socket.io-client";
+import { useEffect } from "react";
+
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  withCredentials: true,
+});
 
 export default function Home() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
+  useEffect(() => {
+  socket.on("user-joined", ({ userId }) => {
+    toast(`${userId} joined ${roomId}`);
+  });
+
+  return () => {
+    socket.off("user-joined");
+  };
+}, [socket, roomId]);
   
   const handleJoinRoom = () => {
     if (!document.cookie) {
@@ -52,6 +67,7 @@ export default function Home() {
     }
 
     navigate(`/room/${roomId}`);
+    socket.emit("join-room", roomId);
     toast(` joined ${roomId} `)
   }
 

@@ -67,29 +67,9 @@ io.on('connection', (socket) => {
     socket.join(roomId)
     createRoomContainer(roomId)
     userSocketMap.set(userId, socket.id);
-    socket.to(roomId).emit('user-joined', { userId });
-
-      ptyProcess = pty.spawn(shell, [], {
-      name: 'xterm-color',
-      cols: 80,
-      rows: 24,
-      cwd: path.resolve(process.env.HOME || '/Home'),
-      env: process.env,
-      });
-    
-     ptyProcess.on('data', (data) => {
-      socket.emit('terminal-output', data);
-    });
-    
-     socket.on('terminal-input', (input) => {
-      ptyProcess.write(input);
-     });
-    
-    socket.on('resize-terminal', ({ cols, rows }) => {
-      if (ptyProcess) {
-        ptyProcess.resize(cols, rows);
-      }
-    });
+    io.to(roomId).emit('user-joined',  {userId} );
+    console.log(`user joined with user id ${userId} in room id ${roomId}`)
+    console.log(userSocketMap)
   })
 
    socket.on('send-message', ({ roomId, message, sender }) => {
