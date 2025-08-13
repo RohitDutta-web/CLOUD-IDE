@@ -11,8 +11,7 @@ import { Server } from "socket.io";
 import { createRoomContainer, createUSerContainer } from "./utils/dockerManager.js";
 import jwt from "jsonwebtoken";
 import cookie from 'cookie';
-import pty from "node-pty";
-import path from "path";
+import { runRoomCode } from "./utils/dockerManager.js";
 import { uploadFile, deleteCodeFile } from "./utils/s3.js";
 
 
@@ -76,12 +75,14 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('receive-message', { message, sender });
    });
   
-  socket.on("run-code", async ({ code, language, fileExtension, roomId }) => {
-    const fileName = `${roomId}.${fileExtension}`
-    const s3Url = await uploadFile(fileName, code);
-    if (s3Url) { socket.emit("File generated to execute!") }
-    
-  })
+  socket.on("runCode", async ({ language, roomId, filename, code }) => {
+    try {
+      const output = await runRoomCode(language, roomId, filename, code);
+      io.to(roomId).emit("codeOutput", { output });
+    } catch (err) {
+      io.to(roomId).emit("codeOutput", { output: `Error: ${err.message}` });
+    }
+  });
 
   
   socket.on('disconnect', () => {
@@ -102,6 +103,9 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/user", userRouter);
 
+setInterval(() => {
+  cleanupIdleContainers(30);
+}, 5 * 60 * 1000);
 
 const port = process.env.PORT;
 server.listen(port, () => {
