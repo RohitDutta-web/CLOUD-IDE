@@ -1,7 +1,13 @@
 import Docker from "dockerode";
 import fs from "fs";
+import { languageDockerConfig } from "../src/Docker/languageConfig";
 
 const docker = new Docker();
+
+//keep track of every containers
+const containers = new Map();
+
+
 //user private docker container
 export const createUSerContainer = async (userId) => {
   const userDir = `/home/codeNimbus/user/${userId}`
@@ -37,7 +43,7 @@ export const createUSerContainer = async (userId) => {
 
 
 //temporary room container
-export const createRoomContainer = async (roomId ) => {
+/* export const createRoomContainer = async (roomId ) => {
   const container = await docker.createContainer({
     Image:  "your-code-nimbus-image",
     Name: `${roomId}-image`,
@@ -51,4 +57,29 @@ export const createRoomContainer = async (roomId ) => {
   
   await container.start();
   return container.id;
-}
+} */
+  
+async function getRoomContainer(language, roomId) {
+  //getting language configurations
+  const config = languageDockerConfig[language];
+  
+  const containerName = `${language}_${roomId}_room_container`
+  const existingContainers = await docker.listContainers({ all: true });
+  const existingContainer = existingContainers.find(container => container.Names.includes(`${containerName}`));
+  let container;
+
+  if (existingContainer) {
+    container = docker.getContainer(existingContainer.Id);
+    const activityInspect = await container.inspect();
+    if (activityInspect.State.Status !== "running") {
+      await container.start()
+    }
+  } else {
+    container = await docker.createContainer({
+      Image: config.image,
+      name: containerName,
+      Tty: false,
+      Cmd: ["tail", "-f", "/dev/null"],
+    })
+   }
+ }
