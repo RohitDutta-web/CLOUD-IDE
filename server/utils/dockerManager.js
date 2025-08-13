@@ -1,6 +1,7 @@
 import Docker from "dockerode";
 import fs from "fs";
 import { languageDockerConfig } from "../src/Docker/languageConfig";
+import tar from "tar-stream";
 
 const docker = new Docker();
 
@@ -15,7 +16,7 @@ export const createUSerContainer = async (userId) => {
     fs.mkdirSync(userDir, { recursive: true });
   }
 
-   const containerName = `${userId}-codeNimbus-image`;
+  const containerName = `${userId}-codeNimbus-image`;
 
   // Check if the container already exists
   const containers = await docker.listContainers({ all: true });
@@ -58,11 +59,14 @@ export const createUSerContainer = async (userId) => {
   await container.start();
   return container.id;
 } */
-  
+
+
+
+//find and start room container
 async function getRoomContainer(language, roomId) {
   //getting language configurations
   const config = languageDockerConfig[language];
-  
+
   const containerName = `${language}_${roomId}_room_container`
   const existingContainers = await docker.listContainers({ all: true });
   const existingContainer = existingContainers.find(container => container.Names.includes(`${containerName}`));
@@ -80,6 +84,59 @@ async function getRoomContainer(language, roomId) {
       name: containerName,
       Tty: false,
       Cmd: ["tail", "-f", "/dev/null"],
+      HostConfig: {
+        AutoRemove: false,
+        Memory: 256 * 1024 * 1024,
+        CpuShares: 256
+      },
+      WorkingDir: "/app"
     })
-   }
- }
+
+    await container.start();
+
+  }
+
+  containers.set(containerName, Date.now());
+
+  return container;
+}
+
+
+export async function runRoomCode(language, roomId, fileName, code) {
+  const config = languageDockerConfig[language];
+
+  const container = await getRoomContainer(language, roomId);
+
+  /*
+  creating tarball as we will put the file into container and archive it 
+  into app directory inside  container
+  */
+  const tarPack = tar.pack();
+  tarPack.entry({ fileName }, code);
+  tarPack.finalize();
+
+  await container.putArchive(tarPack, { path: "/app" });
+
+  // executing the code
+
+  const exec = await container.exec({
+    Cmd: config.cmd,
+    AttachStderr: true,
+    AttachStdin: true,
+    WorkingDir: "/app"
+  })
+
+  return new Promise((resolve, reject) => {
+
+    exec.start((err, stream) => {
+      if (err) return reject(err);
+      let outPut = "";
+      stream.on("data", chunk => (outPut += chunk.toString()));
+       stream.on("end", () => {
+        containerActivity.set(`${language}_room_${roomId}`, Date.now());
+        resolve(outPut);
+      });
+    })
+  })
+
+}
