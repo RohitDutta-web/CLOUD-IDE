@@ -140,3 +140,20 @@ export async function runRoomCode(language, roomId, fileName, code) {
   })
 
 }
+
+
+export async function cleanupIdleContainers(idleMinutes = 30) {
+  const now = Date.now();
+  for (let [name, lastActive] of containerActivity.entries()) {
+    if (now - lastActive > idleMinutes * 60 * 1000) {
+      try {
+        const container = docker.getContainer(name);
+        await container.stop().catch(() => {});
+        await container.remove().catch(() => {});
+      } catch (err) {
+        console.error(`Error removing container ${name}:`, err);
+      }
+      containers.delete(name);
+    }
+  }
+}
