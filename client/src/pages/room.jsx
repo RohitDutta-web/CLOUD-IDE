@@ -14,6 +14,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import io from "socket.io-client";
+import { useEffect } from "react";
 
 // Socket setup
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
@@ -70,6 +71,8 @@ const codingLanguages = {
 };
 
 export default function Room() {
+
+
   const { roomId } = useParams();
 
   const defaultLang = "js";
@@ -79,6 +82,13 @@ export default function Room() {
   const [fileExtension, setFileExtension] = useState(extension);
   const [language, setLanguage] = useState(defaultLang);
   const [chatBox, setChatBox] = useState(false);
+  const [output, setOutPut] = useState("Code first");
+
+  useEffect(() => {
+    socket.on("codeOutput", ({ output }) => {
+        setOutPut(output)
+      })
+    }, [roomId])
 
   const handleRunCode = async () => {
     try {
@@ -152,13 +162,13 @@ export default function Room() {
             />
             <Drawer>
               <DrawerTrigger>
-                <button className="text-green-400 border border-green-400 px-4 py-2 rounded cursor-pointer">
+                <button className="text-green-400 border border-green-400 px-4 py-2 rounded cursor-pointer" onClick={handleRunCode}>
                   <CiPlay1 />
                 </button>
               </DrawerTrigger>
               <DrawerContent>
                 <DrawerHeader>
-                  <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                  <DrawerTitle>{ output }</DrawerTitle>
                   <DrawerDescription>This action cannot be undone.</DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter>

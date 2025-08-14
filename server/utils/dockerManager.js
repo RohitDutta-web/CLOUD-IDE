@@ -1,6 +1,6 @@
 import Docker from "dockerode";
 import fs from "fs";
-import { languageDockerConfig } from "../src/Docker/languageConfig";
+import  {languageDockerConfig}  from "../src/Docker/languageConfig.js";
 import tar from "tar-stream";
 
 const docker = new Docker();
@@ -10,7 +10,7 @@ const containers = new Map();
 
 
 //user private docker container
-export const createUSerContainer = async (userId) => {
+export const createUserContainer = async (userId) => {
   const userDir = `/home/codeNimbus/user/${userId}`
   if (!fs.existsSync(userDir)) {
     fs.mkdirSync(userDir, { recursive: true });
@@ -48,7 +48,7 @@ export const createUSerContainer = async (userId) => {
 
 
 //find and start room container
-async function getRoomContainer(language, roomId) {
+export async function getRoomContainer(language, roomId) {
   //getting language configurations
   const config = languageDockerConfig[language];
 

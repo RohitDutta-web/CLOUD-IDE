@@ -8,10 +8,10 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import http from "http";
 import { Server } from "socket.io";
-import { createRoomContainer, createUSerContainer } from "./utils/dockerManager.js";
+import { getRoomContainer, createUserContainer } from "./utils/dockerManager.js";
 import jwt from "jsonwebtoken";
 import cookie from 'cookie';
-import { runRoomCode } from "./utils/dockerManager.js";
+import { runRoomCode, cleanupIdleContainers } from "./utils/dockerManager.js";
 import { uploadFile, deleteCodeFile } from "./utils/s3.js";
 
 
@@ -57,7 +57,7 @@ io.use((socket, next) => {
 io.on('connection', (socket) => {
 
   const userId = socket.userId;
-  createUSerContainer(userId);
+  createUserContainer(userId);
   console.log("User connected with socketID " + socket.id);
   const shell = process.platform === 'win32' ? 'wsl.exe' : 'bash';;
   let ptyProcess;
