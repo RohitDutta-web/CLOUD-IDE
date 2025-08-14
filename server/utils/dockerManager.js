@@ -44,21 +44,6 @@ export const createUSerContainer = async (userId) => {
 
 
 //temporary room container
-/* export const createRoomContainer = async (roomId ) => {
-  const container = await docker.createContainer({
-    Image:  "your-code-nimbus-image",
-    Name: `${roomId}-image`,
-    Tty: true,
-    Cmd: ["/bin/sh"],
-    HostConfig: {
-      AutoRemove: true,
-    },
-  })
-
-  
-  await container.start();
-  return container.id;
-} */
 
 
 
