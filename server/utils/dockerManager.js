@@ -88,16 +88,21 @@ export async function getRoomContainer(language, roomId) {
 
 
 export async function runRoomCode(language, roomId, fileName, code) {
+  console.log(language, roomId, fileName, code);
   const config = languageDockerConfig[language];
+  console.log(config)
 
   const container = await getRoomContainer(language, roomId);
+
+  console.log(container)
 
   /*
   creating tarball as we will put the file into container and archive it 
   into app directory inside  container
   */
   const tarPack = tar.pack();
-  tarPack.entry({ fileName }, code);
+tarPack.entry({ name: fileName }, code);
+
   tarPack.finalize();
 
   await container.putArchive(tarPack, { path: "/app" });
@@ -129,7 +134,7 @@ export async function runRoomCode(language, roomId, fileName, code) {
 
 export async function cleanupIdleContainers(idleMinutes = 30) {
   const now = Date.now();
-  for (let [name, lastActive] of containerActivity.entries()) {
+  for (let [name, lastActive] of containers.entries()) {
     if (now - lastActive > idleMinutes * 60 * 1000) {
       try {
         const container = docker.getContainer(name);

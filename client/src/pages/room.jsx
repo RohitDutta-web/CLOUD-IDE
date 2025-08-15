@@ -88,17 +88,18 @@ export default function Room() {
     socket.on("codeOutput", ({ output }) => {
         setOutPut(output)
       })
-    }, [roomId])
-
+    }, [])
   const handleRunCode = async () => {
     try {
-      socket.emit("run-code", {
+ socket.emit("runCode", {
         code,
-        language,
-        fileExtension,
+        language: language.toLowerCase(),
+       filename: `main.${extension}`,
         roomId
-
       })
+
+     
+
      }
     catch (e) {
       console.log(e)

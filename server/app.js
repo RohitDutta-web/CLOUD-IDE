@@ -59,12 +59,12 @@ io.on('connection', (socket) => {
   const userId = socket.userId;
   createUserContainer(userId);
   console.log("User connected with socketID " + socket.id);
-  const shell = process.platform === 'win32' ? 'wsl.exe' : 'bash';;
-  let ptyProcess;
+
+
 
   socket.on("join-room", (roomId) => {
     socket.join(roomId)
-    createRoomContainer(roomId)
+    getRoomContainer(roomId)
     userSocketMap.set(userId, socket.id);
     io.to(roomId).emit('user-joined',  {userId} );
     console.log(`user joined with user id ${userId} in room id ${roomId}`)
@@ -78,6 +78,7 @@ io.on('connection', (socket) => {
   socket.on("runCode", async ({ language, roomId, filename, code }) => {
     try {
       const output = await runRoomCode(language, roomId, filename, code);
+      console.log(output)
       io.to(roomId).emit("codeOutput", { output });
     } catch (err) {
       io.to(roomId).emit("codeOutput", { output: `Error: ${err.message}` });
