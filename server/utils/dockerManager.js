@@ -88,18 +88,18 @@ export async function getRoomContainer(language, roomId) {
   const containerName = `${language}_${roomId}_room_container`
   const existingContainers = await docker.listContainers({ all: true });
   const existingContainer = existingContainers.find(container => container.Names[0].includes(`${containerName}`));
-  console.log(existingContainer)
+
   let container;
 
   if (existingContainer) {
-    console.log("Entering first if")
+ 
     container = docker.getContainer(existingContainer.Id);
     const activityInspect = await container.inspect();
     if (activityInspect.State.Status !== "running") {
       await container.start()
     }
   } else {
-    console.log("Entering else")
+ 
     await ensuringImage(language)
     container = await docker.createContainer({
       Image: config.image,
@@ -121,47 +121,67 @@ export async function getRoomContainer(language, roomId) {
   }
 
   containers.set(containerName, Date.now());
-  console.log(containers)
-  console.log(container)
+
 
   return container;
 }
 
 
 //runs the code
-export async function runRoomCode(language, roomId, fileName, code) {
+export async function runRoomCode(language, roomId, fileName, code, socket) {
   const config = languageDockerConfig[language];
   if (!config) throw new Error("Language not supported");
 
   const container = await getRoomContainer(language, roomId);
 
-  // Pack file into tar and copy to /app
+  // put source file into /app
   const tarPack = tar.pack();
   tarPack.entry({ name: fileName }, code);
   tarPack.finalize();
   await container.putArchive(tarPack, { path: "/app" });
 
-  // Execute code
+  // create exec
   const exec = await container.exec({
     Cmd: config.cmd,
     AttachStdout: true,
     AttachStderr: true,
-    WorkingDir: "/app"
+    WorkingDir: "/app",
   });
 
   return new Promise((resolve, reject) => {
-    exec.start((err, stream) => {
+    exec.start({ hijack: true, stdin: false }, (err, stream) => {
       if (err) return reject(err);
 
-      let output = "";
-      stream.on("data", chunk => (output += chunk.toString()));
+      // demux stdout/stderr
+      let stdout = "";
+      let stderr = "";
+
+      container.modem.demuxStream(
+        stream,
+        {
+          write: (chunk) => {
+            const text = chunk.toString();
+            stdout += text;
+            socket.emit("codeOutput", { type: "stdout", data: text }); // send to frontend in realtime
+          },
+        },
+        {
+          write: (chunk) => {
+            const text = chunk.toString();
+            stderr += text;
+            socket.emit("codeOutput", { type: "stderr", data: text }); // send to frontend in realtime
+          },
+        }
+      );
+
       stream.on("end", () => {
-        containers.set(`${language}_${roomId}_room_container`, Date.now()); // ✅ update activity
-        resolve(output);
+        containers.set(`${language}_${roomId}_room_container`, Date.now());
+        resolve({ stdout, stderr });
       });
     });
   });
 }
+
 
 
 export async function cleanupIdleContainers(idleMinutes = 30) {
