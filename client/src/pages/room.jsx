@@ -162,10 +162,10 @@ export default function Room() {
               onClick={handleChatBox}
             />
             <Drawer>
-              <DrawerTrigger>
-                <button className="text-green-400 border border-green-400 px-4 py-2 rounded cursor-pointer" onClick={handleRunCode}>
-                  <CiPlay1 />
-                </button>
+              <DrawerTrigger onClick={handleRunCode}>
+               
+                  <CiPlay1 className="cursor-pointer bg-green-800 rounded text-green-400 pl-3 pr-3 pt-2 pb-2 text-5xl"/>
+                
               </DrawerTrigger>
               <DrawerContent>
                 <DrawerHeader>

@@ -46,6 +46,39 @@ export const createUserContainer = async (userId) => {
 //temporary room container
 
 
+//ensuring image
+async function ensuringImage(language) {
+  const config = languageDockerConfig[language];
+  if (!config) throw new Error(`Unsupported language: ${language}`);
+
+  const imageName = config.image;
+  try {
+    await docker.getImage(imageName).inspect();
+    console.log(`✅ Image ${imageName} exists`);
+  } catch (err) {
+    console.log(`⬇️ Pulling image ${imageName}...`);
+    await new Promise((resolve, reject) => {
+      docker.pull(imageName, (err, stream) => {
+        if (err) return reject(err);
+        docker.modem.followProgress(stream, onFinished, onProgress);
+
+        function onFinished(err, output) {
+          if (err) reject(err);
+          else resolve(output);
+        }
+
+        function onProgress(event) {
+          if (event.status) {
+            process.stdout.write(`\r${event.status} ${event.progress || ""}`);
+          }
+        }
+      });
+    });
+    console.log(`\n✅ Pulled image ${imageName}`);
+  }
+}
+
+
 
 //find and start room container
 export async function getRoomContainer(language, roomId) {
@@ -54,16 +87,20 @@ export async function getRoomContainer(language, roomId) {
 
   const containerName = `${language}_${roomId}_room_container`
   const existingContainers = await docker.listContainers({ all: true });
-  const existingContainer = existingContainers.find(container => container.Names.includes(`${containerName}`));
+  const existingContainer = existingContainers.find(container => container.Names[0].includes(`${containerName}`));
+  console.log(existingContainer)
   let container;
 
   if (existingContainer) {
+    console.log("Entering first if")
     container = docker.getContainer(existingContainer.Id);
     const activityInspect = await container.inspect();
     if (activityInspect.State.Status !== "running") {
       await container.start()
     }
   } else {
+    console.log("Entering else")
+    await ensuringImage(language)
     container = await docker.createContainer({
       Image: config.image,
       name: containerName,
@@ -76,59 +113,54 @@ export async function getRoomContainer(language, roomId) {
       },
       WorkingDir: "/app"
     })
+    console.log("container created")
+ console.log(await container.inspect())
 
     await container.start();
 
   }
 
   containers.set(containerName, Date.now());
+  console.log(containers)
+  console.log(container)
 
   return container;
 }
 
 
+//runs the code
 export async function runRoomCode(language, roomId, fileName, code) {
-  console.log(language, roomId, fileName, code);
   const config = languageDockerConfig[language];
-  console.log(config)
+  if (!config) throw new Error("Language not supported");
 
   const container = await getRoomContainer(language, roomId);
 
-  console.log(container)
-
-  /*
-  creating tarball as we will put the file into container and archive it 
-  into app directory inside  container
-  */
+  // Pack file into tar and copy to /app
   const tarPack = tar.pack();
-tarPack.entry({ name: fileName }, code);
-
+  tarPack.entry({ name: fileName }, code);
   tarPack.finalize();
-
   await container.putArchive(tarPack, { path: "/app" });
 
-  // executing the code
-
+  // Execute code
   const exec = await container.exec({
     Cmd: config.cmd,
+    AttachStdout: true,
     AttachStderr: true,
-    AttachStdin: true,
     WorkingDir: "/app"
-  })
+  });
 
   return new Promise((resolve, reject) => {
-
     exec.start((err, stream) => {
       if (err) return reject(err);
-      let outPut = "";
-      stream.on("data", chunk => (outPut += chunk.toString()));
-       stream.on("end", () => {
-        containerActivity.set(`${language}_room_${roomId}`, Date.now());
-        resolve(outPut);
-      });
-    })
-  })
 
+      let output = "";
+      stream.on("data", chunk => (output += chunk.toString()));
+      stream.on("end", () => {
+        containers.set(`${language}_${roomId}_room_container`, Date.now()); // ✅ update activity
+        resolve(output);
+      });
+    });
+  });
 }
 
 
