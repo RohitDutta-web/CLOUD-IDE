@@ -75,15 +75,18 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('receive-message', { message, sender });
    });
   
-  socket.on("runCode", async ({ language, roomId, filename, code }) => {
-    try {
-      const output = await runRoomCode(language, roomId, filename, code);
-      console.log(output)
-      io.to(roomId).emit("codeOutput", { output });
-    } catch (err) {
-      io.to(roomId).emit("codeOutput", { output: `Error: ${err.message}` });
-    }
-  });
+socket.on("runCode", async ({ language, roomId, filename, code }) => {
+  try {
+  
+    await runRoomCode(language, roomId, filename, code, io);
+ 
+
+  } catch (err) {
+    io.to(roomId).emit("codeOutput", { output: `Error: ${err.message}` });
+  }
+});
+
+
 
   
   socket.on('disconnect', () => {

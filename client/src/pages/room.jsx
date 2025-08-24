@@ -82,13 +82,16 @@ export default function Room() {
   const [fileExtension, setFileExtension] = useState(extension);
   const [language, setLanguage] = useState(defaultLang);
   const [chatBox, setChatBox] = useState(false);
-  const [output, setOutPut] = useState("Code first");
+  const [output, setOutPut] = useState("");
 
-  useEffect(() => {
-    socket.on("codeOutput", ({ output }) => {
-        setOutPut(output)
-      })
-    }, [])
+ useEffect(() => {
+  socket.on("codeOutput", ({ output }) => {
+    setOutPut((prev) => prev + output); 
+  });
+
+  return () => socket.off("codeOutput");
+}, []);
+
   const handleRunCode = async () => {
     try {
  socket.emit("runCode", {
