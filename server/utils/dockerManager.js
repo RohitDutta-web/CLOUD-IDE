@@ -64,6 +64,7 @@ async function ensuringImage(language) {
 // ---------- ROOM CONTAINER ----------
 export async function getRoomContainer(language, roomId) {
   const config = languageDockerConfig[language];
+  console.log("after config :" + config)
   const containerName = `${language}_${roomId}_room_container`;
 
   const existing = (await docker.listContainers({ all: true }))
@@ -97,43 +98,54 @@ export async function getRoomContainer(language, roomId) {
 }
 
 // ---------- RUN CODE IN ROOM ----------
-export const runRoomCode = async (language, roomId, filename, code, io) => {
-  const config = languageDockerConfig[language];
-  if (!config) {
-    io.to(roomId).emit("codeOutput", { output: "Unsupported language" });
-    return;
+
+export async function runRoomCode(language, roomId, filename, code, io) {
+  try {
+    console.log("▶️ runRoomCode called");
+
+    // 2. Get or create persistent room container
+    const container = await getRoomContainer(language, roomId);
+
+    console.log(container)
+    // 3. Copy file into container
+    const pack = tar.pack();
+    pack.entry({ name: filename }, code);
+    pack.finalize();
+    await container.putArchive(pack, { path: "/app" });
+
+    // 4. Execute code inside container
+    let cmd;
+    if (language === "js") {
+      cmd = ["node", filename];
+    } else {
+      throw new Error(`Unsupported language: ${language}`);
+    }
+
+    const exec = await container.exec({
+      Cmd: cmd,
+      AttachStdout: true,
+      AttachStderr: true,
+      WorkingDir: "/app",
+    });
+
+    const stream = await exec.start({ hijack: true, stdin: false });
+
+    // 5. Forward logs to Socket.IO
+    stream.on("data", (chunk) => {
+      const output = chunk.toString();
+      io.to(roomId).emit("codeOutput", { output });
+      console.log("📤 Code Output:", output);
+    });
+
+    stream.on("end", () => {
+      console.log("✅ Execution finished");
+    });
+
+  } catch (err) {
+    io.to(roomId).emit("codeOutput", { output: `Error: ${err.message}` });
+    console.error("❌ runRoomCode error:", err);
   }
-
-  // get (or create) room container
-  const container = await getRoomContainer(language, roomId);
-
-  // pack code file
-  const pack = tar.pack();
-  pack.entry({ name: filename }, code);
-  pack.finalize();
-  await container.putArchive(pack, { path: config.workdir });
-
-  // exec process in existing container
-  const exec = await container.exec({
-    Cmd: config.cmd,
-    AttachStdout: true,
-    AttachStderr: true,
-    WorkingDir: config.workdir,
-  });
-
-  const execStream = await exec.start({ hijack: true, stdin: false });
-
-  const stdout = new PassThrough();
-  const stderr = new PassThrough();
-  docker.modem.demuxStream(execStream, stdout, stderr);
-
-  stdout.on("data", (chunk) => {
-    io.to(roomId).emit("codeOutput", { output: chunk.toString() });
-  });
-  stderr.on("data", (chunk) => {
-    io.to(roomId).emit("codeOutput", { output: chunk.toString() });
-  });
-};
+}
 
 // ---------- CLEANUP ----------
 export async function cleanupIdleContainers(idleMinutes = 30) {

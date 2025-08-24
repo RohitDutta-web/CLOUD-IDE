@@ -7,11 +7,14 @@ import { setUser, setIsLoggedIn } from "../utils/userSlice.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { MdHome } from "react-icons/md";
+import { io } from "socket.io-client";
 
 
 
 export default function UserEntry() {
   const navigate = useNavigate();
+  let socket;
+
 
   const dispatch = useDispatch();
 
@@ -30,6 +33,8 @@ export default function UserEntry() {
       }
     ))
   }
+
+  //user login
   const logInHandler = async (e) => {
     e.preventDefault();
 
@@ -53,11 +58,16 @@ export default function UserEntry() {
 
       if (data.data?.success) {
         dispatch(setIsLoggedIn(true))
-        dispatch(setUser(data.data?.user)
-
-
-        );
+        dispatch(setUser(data.data?.user));
         toast(data.data?.message);
+        socket = io(import.meta.env.VITE_BACKEND_URL, {
+          withCredentials: true
+        })
+        socket.on("connect", () => {
+          console.log("Socket connected !")
+        })
+
+
 
         navigate("/");
       }

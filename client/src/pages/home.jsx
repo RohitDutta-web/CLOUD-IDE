@@ -39,7 +39,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import io from "socket.io-client";
-import { useEffect } from "react";
+
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
   withCredentials: true,
@@ -48,28 +48,17 @@ const socket = io(import.meta.env.VITE_BACKEND_URL, {
 export default function Home() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
-  useEffect(() => {
-  socket.on("user-joined", ({ userId }) => {
-    toast(`${userId} joined ${roomId}`);
-  });
 
-  return () => {
-    socket.off("user-joined");
-  };
-}, [socket, roomId]);
-  
+
   const handleJoinRoom = () => {
-    if (!document.cookie) {
-      return toast("PLease login first")
-     }
-    if (roomId.length < 6) {
-      return toast("Invalid Room id")
-    }
+    if (!document.cookie) return toast("Please login first");
+    if (roomId.length < 6) return toast("Invalid Room id");
+
+    socket.emit("join-room", roomId);
+    toast(`Joined ${roomId}`);
 
     navigate(`/room/${roomId}`);
-    socket.emit("join-room", roomId);
-    toast(` joined ${roomId} `)
-  }
+  };
 
   const roomIdForm = (e) => {
     setRoomId(e.target.value);
@@ -78,23 +67,25 @@ export default function Home() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
 
-  
 
 
 
-  const handleLogOut = async() => {
-    try { 
+
+  const handleLogOut = async () => {
+    try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_LOGOUT, {
         withCredentials: true,
       });
       if (response.data?.success) {
+        socket.disconnect();
         toast(response.data?.message)
+
         navigate("/userEntry");
       }
     }
     catch (e) {
       toast(e.response?.data?.message);
-      
+
     }
   }
   return (
@@ -152,35 +143,35 @@ export default function Home() {
 
         <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
           <AlertDialog>
-              <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Create room</AlertDialogTrigger>
-              <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-green-400">Enter a room id or click create a default named room</AlertDialogTitle>
-                  <AlertDialogDescription className="text-green-700">
-                   <input type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white"   />
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
+            <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Create room</AlertDialogTrigger>
+            <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-green-400">Enter a room id or click create a default named room</AlertDialogTitle>
+                <AlertDialogDescription className="text-green-700">
+                  <input type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" />
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
                 <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" >Create</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <AlertDialog>
-              <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Join Room</AlertDialogTrigger>
-              <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-green-400">Enter room id</AlertDialogTitle>
-                  <AlertDialogDescription className="text-green-700">
-                   <input type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white"  onChange={roomIdForm}  />
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={handleJoinRoom }>Join</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Join Room</AlertDialogTrigger>
+            <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-green-400">Enter room id</AlertDialogTitle>
+                <AlertDialogDescription className="text-green-700">
+                  <input type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" onChange={roomIdForm} />
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
+                <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={handleJoinRoom}>Join</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </PopoverContent>
 
       </Popover>
@@ -189,21 +180,21 @@ export default function Home() {
         isLoggedIn ? <Popover >
           <PopoverTrigger className="absolute text-green-400  top-5 right-40  rounded font-bold text-5xl cursor-pointer mr-5"><FaRegUserCircle /></PopoverTrigger>
           <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
-            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={()=> navigate("/details")}>Profile Details</p>
-            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={()=> navigate("/codingPlayGround")}>Playground</p>
-            
+            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={() => navigate("/details")}>Profile Details</p>
+            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={() => navigate("/codingPlayGround")}>Playground</p>
+
             <AlertDialog>
               <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Log Out</AlertDialogTrigger>
               <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-green-400">You want to log out?</AlertDialogTitle>
                   <AlertDialogDescription className="text-green-700">
-                   Hopefully will see you again
+                    Hopefully will see you again
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
-                  <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={handleLogOut }>Continue</AlertDialogAction>
+                  <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={handleLogOut}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

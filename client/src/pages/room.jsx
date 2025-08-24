@@ -92,13 +92,20 @@ export default function Room() {
   return () => socket.off("codeOutput");
 }, []);
 
+  
+  //handling code and sending it's details to backend 
   const handleRunCode = async () => {
     try {
- socket.emit("runCode", {
-        code,
+   
+      socket.emit("runCode", {
         language: language.toLowerCase(),
-       filename: `main.${extension}`,
-        roomId
+        roomId,
+        filename: `main.${fileExtension}`,
+   
+        code,
+     
+       
+      
       })
 
      
@@ -125,6 +132,7 @@ export default function Room() {
   const handleCodeLan = (e) => {
     const selectedLang = e.target.value;
     const langData = codingLanguages[selectedLang];
+
 
     if (langData) {
       setLanguage(selectedLang);
