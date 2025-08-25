@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/drawer";
 import io from "socket.io-client";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 // Socket setup
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
@@ -85,12 +86,23 @@ export default function Room() {
   const [output, setOutPut] = useState("");
 
  useEffect(() => {
-  socket.on("codeOutput", ({ output }) => {
-    setOutPut((prev) => prev + output); 
+  // listen for user joined
+  socket.on("user-joined", ({ userId }) => {
+    toast(`Welcome user : ${userId}`);
   });
 
-  return () => socket.off("codeOutput");
+  // listen for code output
+  socket.on("codeOutput", ({ output }) => {
+    setOutPut((prev) => prev + output);
+  });
+
+  // cleanup listeners on unmount
+  return () => {
+    socket.off("user-joined");
+    socket.off("codeOutput");
+  };
 }, []);
+
 
   
   //handling code and sending it's details to backend 
