@@ -31,7 +31,8 @@ const io = new Server(server, {
   },
 });
 
-const userSocketMap = new Map();
+const userSocketMap = new Map;
+const rooms = {}
 
 // ✅ Auth middleware for sockets
 io.use((socket, next) => {
@@ -52,20 +53,33 @@ io.use((socket, next) => {
 });
 
 // ✅ Socket handlers
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
+  let socketID = socket.id
   const userId = socket.userId;
-  console.log("🔌 User connected:", socket.id, "userId:", userId);
+  console.log("🔌 User connected:", socketID, "userId:", userId);
 
   // Each user gets their private container (if you need that model)
-  createUserContainer(userId);
-
+   try {
+    const container = await createUserContainer(userId);
+    console.log(`🚀 Container ready for ${userId} with ${container.id}`);
+  } catch (err) {
+    console.error(`❌ Failed to start container for ${userId}:`, err);
+  }
+  
   // --- Room Join ---
-  socket.on("join-room", (roomId) => {
-    socket.join(roomId);
-    userSocketMap.set(userId, socket.id);
+  socket.on("join-room", ({ roomId }) => {
 
-    io.to(roomId).emit("user-joined", { userId });
-    console.log(`👥 User ${userId} joined room ${roomId}`);
+    socket.join(roomId);
+    userSocketMap.set(userId, socketID);
+    if (!rooms[roomId]) {
+  rooms[roomId] = [];
+}
+    rooms[roomId].push(socketID)
+
+    rooms[roomId].forEach((id) => {
+
+      io.to(id).emit("user-joined", { userId });
+    });
   });
 
   // --- Chat Messages ---

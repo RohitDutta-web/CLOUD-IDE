@@ -18,10 +18,22 @@ export const createUserContainer = async (userId) => {
   const existing = (await docker.listContainers({ all: true }))
     .find(c => c.Names.includes(`/${containerName}`));
 
-  if (existing) {
-    console.log(`Container for ${userId} already exists.`);
-    return docker.getContainer(existing.Id);
+ if (existing) {
+  const container = docker.getContainer(existing.Id);
+  const info = await container.inspect();
+
+  if (info.State.Status !== "running") {
+    try {
+      await container.start();
+    } catch (err) {
+      console.error(`❌ Failed to start existing container:`, err);
+    }
+  } else {
+    console.log(`🟢 Container already running for ${userId}`);
   }
+
+  return container;
+}
 
   const container = await docker.createContainer({
     Image: "your-code-nimbus-image",
@@ -34,9 +46,12 @@ export const createUserContainer = async (userId) => {
     },
   });
 
+ try {
   await container.start();
   console.log("✅ User container started");
-  return container;
+} catch (err) {
+  console.error("❌ Failed to start container:", err);
+}
 };
 
 // ---------- ENSURE IMAGE ----------
@@ -106,7 +121,7 @@ export async function runRoomCode(language, roomId, filename, code, io) {
     // 2. Get or create persistent room container
     const container = await getRoomContainer(language, roomId);
 
-    console.log(container)
+  
     // 3. Copy file into container
     const pack = tar.pack();
     pack.entry({ name: filename }, code);

@@ -54,7 +54,7 @@ export default function Home() {
     if (!document.cookie) return toast("Please login first");
     if (roomId.length < 6) return toast("Invalid Room id");
 
-    socket.emit("join-room", roomId);
+    socket.emit("join-room", {roomId: roomId});
     toast(`Joined ${roomId}`);
 
     navigate(`/room/${roomId}`);
@@ -77,7 +77,6 @@ export default function Home() {
         withCredentials: true,
       });
       if (response.data?.success) {
-        socket.disconnect();
         toast(response.data?.message)
 
         navigate("/userEntry");

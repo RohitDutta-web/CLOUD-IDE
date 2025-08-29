@@ -87,20 +87,15 @@ export default function Room() {
 
  useEffect(() => {
   // listen for user joined
-  socket.on("user-joined", ({ userId }) => {
+  socket.on("user-joined", ( userId ) => {
     toast(`Welcome user : ${userId}`);
   });
-
   // listen for code output
   socket.on("codeOutput", ({ output }) => {
     setOutPut((prev) => prev + output);
   });
 
-  // cleanup listeners on unmount
-  return () => {
-    socket.off("user-joined");
-    socket.off("codeOutput");
-  };
+
 }, []);
 
 
