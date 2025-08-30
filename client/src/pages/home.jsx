@@ -49,16 +49,19 @@ export default function Home() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
 
+const handleJoinRoom = () => {
+  if (!document.cookie) return toast("Please login first");
+  
 
-  const handleJoinRoom = () => {
-    if (!document.cookie) return toast("Please login first");
-    if (roomId.length < 6) return toast("Invalid Room id");
+  if (roomId.length < 6) return toast("Invalid Room id");
 
-    socket.emit("join-room", {roomId: roomId});
-    toast(`Joined ${roomId}`);
-
-    navigate(`/room/${roomId}`);
+  socket.emit("join-room", { roomId });
+  toast(`Joined ${roomId}`);
+  navigate(`/room/${roomId}`);
   };
+  
+  const handleCreateRoom = () => {}
+
 
   const roomIdForm = (e) => {
     setRoomId(e.target.value);

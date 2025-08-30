@@ -32,6 +32,7 @@ const io = new Server(server, {
 });
 
 const userSocketMap = new Map;
+
 const rooms = {}
 
 // ✅ Auth middleware for sockets
@@ -59,21 +60,21 @@ io.on("connection", async (socket) => {
   console.log("🔌 User connected:", socketID, "userId:", userId);
 
   // Each user gets their private container (if you need that model)
-   try {
+  try {
     const container = await createUserContainer(userId);
     console.log(`🚀 Container ready for ${userId} with ${container.id}`);
   } catch (err) {
     console.error(`❌ Failed to start container for ${userId}:`, err);
   }
-  
+
   // --- Room Join ---
   socket.on("join-room", ({ roomId }) => {
 
     socket.join(roomId);
     userSocketMap.set(userId, socketID);
     if (!rooms[roomId]) {
-  rooms[roomId] = [];
-}
+      rooms[roomId] = [];
+    }
     rooms[roomId].push(socketID)
 
     rooms[roomId].forEach((id) => {

@@ -73,6 +73,7 @@ const codingLanguages = {
 
 export default function Room() {
 
+ 
 
   const { roomId } = useParams();
 
@@ -87,7 +88,7 @@ export default function Room() {
 
  useEffect(() => {
   // listen for user joined
-  socket.on("user-joined", ( userId ) => {
+  socket.on("user-joined", ( {userId} ) => {
     toast(`Welcome user : ${userId}`);
   });
   // listen for code output
@@ -96,7 +97,7 @@ export default function Room() {
   });
 
 
-}, []);
+}, [socket]);
 
 
   
