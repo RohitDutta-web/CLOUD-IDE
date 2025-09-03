@@ -13,10 +13,15 @@ const roomSchema = new mongoose.Schema({
   containerId: { //connect to container when start
     type: String,
     required: true
-  }
-}, {
-  timestamps: true // to track time and activity
-})
+  },
+  code: {
+    type: String
+  },
+},
+
+  {
+    timestamps: true // to track time and activity
+  })
 
 const Room = mongoose.model("Room", roomSchema)
 

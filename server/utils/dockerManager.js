@@ -3,6 +3,7 @@ import fs from "fs";
 import { PassThrough } from "stream";
 import { languageDockerConfig } from "../src/Docker/languageConfig.js";
 import tar from "tar-stream";
+import User from "../models/user.model.js";
 
 const docker = new Docker();
 const containers = new Map(); // track active containers
@@ -178,4 +179,56 @@ export async function cleanupIdleContainers(idleMinutes = 30) {
       containers.delete(name);
     }
   }
+}
+
+
+//creating and starting room container
+export const createRoomContainer = async (roomId) => {
+  try { 
+    const containerName = `${roomId}_Container`
+    const existing = await docker.listContainers({ all: true }).find(c => c.names.includes(containerName));
+    if (existing) {
+      const existingContainer = docker.getContainer(existing.id)
+      const info = await existingContainer.inspect();
+      
+      if (info.State.Status !== "running") {
+        try { 
+          await existingContainer.start();
+        }
+        catch (e) {
+          console.log("Error while starting existing container" + e)
+        }
+
+        return existingContainer;
+      }
+    }
+
+
+    const container = await docker.createContainer({
+       Image: `${roomId}_container_image`,
+      name: containerName,
+      tty: true,
+      WorkingDir: "/workspace",
+      HostConfig: {
+        AutoRemove: true,
+        NetworkMode: "none",
+        Memory: 512 * 1024 * 1024,
+        NanoCpus: 1000000000
+      },
+      Cmd: ["/bin/sh"]
+    })
+
+    try { 
+      await container.start();
+    } catch (e) {
+      console.log("Facing problem while starting new room container" + e)
+    }
+    return container;
+  }
+  catch (e) {
+    console.log(e.message)
+  }
+
+
+
 }
