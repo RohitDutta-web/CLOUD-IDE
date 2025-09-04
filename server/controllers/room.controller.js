@@ -97,9 +97,44 @@ export const joinRoom = async (req, res) => {
 }
 
 
-//delete room and its container after being idle or auto delete if no user presents
-export const deleteRoom = async (req, res) => {
-  try { }
+//exiting room
+export const exitRoom = async (req, res) => {
+  try {
+    const { roomId } = req.params;
+    const userId = req.id;
+
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid user",
+        success: false
+      })
+    }
+
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      return res.status(400).json({
+        message: "Invalid room id",
+        success: false
+      })
+    }
+
+    if (room.users.includes(user._id)) {
+      room.users = room.users.filter(
+        (u) => u.toString() !== userId.toString()
+      );
+      await room.save();
+    }
+
+    await room.save()
+
+    return res.status(200).json({
+      message: "Exited from room",
+      success: true
+    })
+
+
+  }
   catch (e) {
     return res.status(400).json({
       message: e.message || "Something went wrong",
