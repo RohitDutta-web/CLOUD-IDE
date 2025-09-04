@@ -126,7 +126,6 @@ export const exitRoom = async (req, res) => {
       await room.save();
     }
 
-    await room.save()
 
     return res.status(200).json({
       message: "Exited from room",
