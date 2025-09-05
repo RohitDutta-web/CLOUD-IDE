@@ -38,12 +38,13 @@ export const createRoom = async (req, res) => {
     return res.status(200).json({
       message: "Room created",
       success: true,
-      room
+      room,
+      userName: user.username
     })
   }
   catch (e) {
     return res.status(400).json({
-      message: e.message || "Something went wrong",
+      message: "Internal server issue",
       success: false
     })
   }

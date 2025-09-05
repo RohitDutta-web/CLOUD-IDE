@@ -19,22 +19,22 @@ export const createUserContainer = async (userId) => {
   const existing = (await docker.listContainers({ all: true }))
     .find(c => c.Names.includes(`/${containerName}`));
 
- if (existing) {
-  const container = docker.getContainer(existing.Id);
-  const info = await container.inspect();
+  if (existing) {
+    const container = docker.getContainer(existing.Id);
+    const info = await container.inspect();
 
-  if (info.State.Status !== "running") {
-    try {
-      await container.start();
-    } catch (err) {
-      console.error(`❌ Failed to start existing container:`, err);
+    if (info.State.Status !== "running") {
+      try {
+        await container.start();
+      } catch (err) {
+        console.error(`❌ Failed to start existing container:`, err);
+      }
+    } else {
+      console.log(`🟢 Container already running for ${userId}`);
     }
-  } else {
-    console.log(`🟢 Container already running for ${userId}`);
-  }
 
-  return container;
-}
+    return container;
+  }
 
   const container = await docker.createContainer({
     Image: "your-code-nimbus-image",
@@ -47,12 +47,12 @@ export const createUserContainer = async (userId) => {
     },
   });
 
- try {
-  await container.start();
-  console.log("✅ User container started");
-} catch (err) {
-  console.error("❌ Failed to start container:", err);
-}
+  try {
+    await container.start();
+    console.log("✅ User container started");
+  } catch (err) {
+    console.error("❌ Failed to start container:", err);
+  }
 };
 
 // ---------- ENSURE IMAGE ----------
@@ -122,7 +122,7 @@ export async function runRoomCode(language, roomId, filename, code, io) {
     // 2. Get or create persistent room container
     const container = await getRoomContainer(language, roomId);
 
-  
+
     // 3. Copy file into container
     const pack = tar.pack();
     pack.entry({ name: filename }, code);
@@ -170,8 +170,8 @@ export async function cleanupIdleContainers(idleMinutes = 30) {
     if (now - lastActive > idleMinutes * 60 * 1000) {
       try {
         const container = docker.getContainer(name);
-        await container.stop().catch(() => {});
-        await container.remove().catch(() => {});
+        await container.stop().catch(() => { });
+        await container.remove().catch(() => { });
         console.log(`🗑️ Cleaned up idle container: ${name}`);
       } catch (err) {
         console.error(`Error removing container ${name}:`, err);
@@ -184,15 +184,17 @@ export async function cleanupIdleContainers(idleMinutes = 30) {
 
 //creating and starting room container
 export const createRoomContainer = async (roomId) => {
-  try { 
+  try {
     const containerName = `${roomId}_Container`
-    const existing = await docker.listContainers({ all: true }).find(c => c.names.includes(containerName));
+    const containers = await docker.listContainers({ all: true });
+    const existing = containers.find(c => c.Names.includes(`/${containerName}`));
+
     if (existing) {
-      const existingContainer = docker.getContainer(existing.id)
+      const existingContainer = docker.getContainer(existing.Id)
       const info = await existingContainer.inspect();
-      
+
       if (info.State.Status !== "running") {
-        try { 
+        try {
           await existingContainer.start();
         }
         catch (e) {
@@ -205,7 +207,7 @@ export const createRoomContainer = async (roomId) => {
 
 
     const container = await docker.createContainer({
-       Image: `${roomId}_container_image`,
+      Image: "cloudide-polyglot:latest",
       name: containerName,
       tty: true,
       WorkingDir: "/workspace",
@@ -218,7 +220,7 @@ export const createRoomContainer = async (roomId) => {
       Cmd: ["/bin/sh"]
     })
 
-    try { 
+    try {
       await container.start();
     } catch (e) {
       console.log("Facing problem while starting new room container" + e)

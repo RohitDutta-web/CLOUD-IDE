@@ -6,6 +6,7 @@ import { dbConnection } from "./config/db.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
+import roomRouter from "./routes/room.routes.js";
 import http from "http";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
@@ -119,6 +120,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // ✅ Routes
 app.use("/user", userRouter);
+app.use("/room", roomRouter);
 
 // ✅ Cleanup idle containers every 5 min
 setInterval(() => {

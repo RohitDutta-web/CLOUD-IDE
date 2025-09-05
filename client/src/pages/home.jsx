@@ -49,18 +49,35 @@ export default function Home() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
 
-const handleJoinRoom = () => {
-  if (!document.cookie) return toast("Please login first");
-  
+  const handleJoinRoom = () => {
+    if (!document.cookie) return toast("Please login first");
 
-  if (roomId.length < 6) return toast("Invalid Room id");
 
-  socket.emit("join-room", { roomId });
-  toast(`Joined ${roomId}`);
-  navigate(`/room/${roomId}`);
+    if (roomId.length < 1) return toast("Invalid Room id");
+
+    socket.emit("join-room", { roomId });
+    toast(`Joined ${roomId}`);
+    navigate(`/room/${roomId}`);
   };
-  
-  const handleCreateRoom = () => {}
+
+  const handleCreateRoom = async () => {
+    try {
+      console.log(roomId)
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/room/createRoom`, { roomId : roomId}, {
+        withCredentials: true,
+      })
+
+      if (res.data?.success) {
+        navigate(`/room/${res.data?.room?.roomId}`)
+        toast(`${res.data?.userName} joined room`)
+
+      }
+    }
+    catch (e) {
+      toast(e.response?.data?.message)
+    }
+  }
 
 
   const roomIdForm = (e) => {
@@ -148,14 +165,14 @@ const handleJoinRoom = () => {
             <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Create room</AlertDialogTrigger>
             <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-green-400">Enter a room id or click create a default named room</AlertDialogTitle>
+                <AlertDialogTitle className="text-green-400" >Enter a room id or click create a default named room</AlertDialogTitle>
                 <AlertDialogDescription className="text-green-700">
-                  <input type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" />
+                  <input onChange={(e) => setRoomId(e.target.value) } type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" />
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" >Create</AlertDialogAction>
+                <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={handleCreateRoom}>Create</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
