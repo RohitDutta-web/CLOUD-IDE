@@ -17,6 +17,7 @@ import {
   createUserContainer,
 } from "./utils/dockerManager.js";
 import { uploadFile, deleteCodeFile } from "./utils/s3.js";
+import Room from "./models/room.model.js";
 
 dotenv.config();
 const app = express();
@@ -69,20 +70,19 @@ io.on("connection", async (socket) => {
   }
 
   // --- Room Join ---
-  socket.on("join-room", ({ roomId }) => {
+ socket.on("joinRoom", async ({ roomId }) => {
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      socket.emit("error", "Room not found");
+      return;
+    }
 
     socket.join(roomId);
-    userSocketMap.set(userId, socketID);
-    if (!rooms[roomId]) {
-      rooms[roomId] = [];
-    }
-    rooms[roomId].push(socketID)
+    console.log(`User ${socket.userId} joined room ${roomId}`);
 
-    rooms[roomId].forEach((id) => {
-
-      io.to(id).emit("user-joined", { userId });
-    });
-  });
+    // Notify others
+    socket.to(roomId).emit("userJoined", { userId: socket.userId });
+  })
 
   // --- Chat Messages ---
   socket.on("send-message", ({ roomId, message, sender }) => {

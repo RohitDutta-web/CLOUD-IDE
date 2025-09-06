@@ -48,6 +48,7 @@ const socket = io(import.meta.env.VITE_BACKEND_URL, {
 export default function Home() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
+  
 
   const handleJoinRoom = () => {
     if (!document.cookie) return toast("Please login first");
