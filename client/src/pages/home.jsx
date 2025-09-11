@@ -56,7 +56,6 @@ export default function Home() {
 
     if (roomId.length < 1) return toast("Invalid Room id");
     try {
-      console.log(roomId)
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/room/joinRoom`, { roomId: roomId }, {
         withCredentials: true,

@@ -82,9 +82,9 @@ io.on("connection", async (socket) => {
     console.log(`User ${socket.userId} joined room ${roomId}`);
 
     // Notify others
-    socket.to(roomId).emit("userJoined", { userId: socket.userId });
+    io.to(roomId).emit("userJoined", socket.userId);
   })
-
+  
   // --- Chat Messages ---
   socket.on("send-message", ({ roomId, message, sender }) => {
     io.to(roomId).emit("receive-message", { message, sender });

@@ -85,19 +85,28 @@ export default function Room() {
   const [language, setLanguage] = useState(defaultLang);
   const [chatBox, setChatBox] = useState(false);
   const [output, setOutPut] = useState("");
+useEffect(() => {
+  if (!socket) return;
 
- useEffect(() => {
-  // listen for user joined
-  socket.on("user-joined", ( {userId} ) => {
-    toast(`Welcome user : ${userId}`);
+  // 👉 Emit event when user joins
+  socket.emit("joinRoom", { roomId });
+
+  // 👉 Listen for confirmation from server
+  socket.on("userJoined", (userId) => {
+    toast(`Welcome user: ${userId} joined room ${roomId}`);
   });
-  // listen for code output
+
+  // 👉 Listen for code output
   socket.on("codeOutput", ({ output }) => {
     setOutPut((prev) => prev + output);
   });
 
-
-}, [socket]);
+  // cleanup to avoid multiple listeners
+  return () => {
+    socket.off("userJoined");
+    socket.off("codeOutput");
+  };
+}, [socket, roomId]);
 
 
   
@@ -105,11 +114,9 @@ export default function Room() {
   const handleRunCode = async () => {
     try {
    
-      socket.emit("runCode", {
+      socket.emit("execute", {
         language: language.toLowerCase(),
         roomId,
-        filename: `main.${fileExtension}`,
-   
         code,
      
        
