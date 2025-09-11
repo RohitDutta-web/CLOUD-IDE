@@ -234,3 +234,43 @@ export const createRoomContainer = async (roomId) => {
 
 
 }
+
+
+
+export const codeExecution = async (language, containerId, code) => {
+  try {
+    const container = await docker.getContainer(containerId)
+    const config = languageDockerConfig[language]
+
+    const exec = await container.exec({
+      Cmd: config.cmd(code),
+      AttachStdout: true,
+      AttachStderr: true
+    })
+    return new Promise((resolve, reject) => {
+      exec.start({ hijack: true, stdin: false }, (err, stream) => {
+        if (err) return reject(err);
+
+        let stdout = "";
+        let stderr = "";
+
+        container.modem.demuxStream(stream, {
+          write: (chunk) => (stdout += chunk.toString())
+        }, {
+          write: (chunk) => (stderr += chunk.toString())
+        });
+
+        stream.on("end", () => {
+          resolve({ stdout, stderr });
+        });
+
+        stream.on("error", (e) => {
+          reject(e);
+        });
+      });
+    });
+  }
+  catch (e) {
+    console.log("docker manager issue : " + e.message)
+  }
+}

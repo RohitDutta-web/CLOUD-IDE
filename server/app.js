@@ -15,6 +15,7 @@ import {
   runRoomCode,
   cleanupIdleContainers,
   createUserContainer,
+  codeExecution,
 } from "./utils/dockerManager.js";
 import { uploadFile, deleteCodeFile } from "./utils/s3.js";
 import Room from "./models/room.model.js";
@@ -70,7 +71,7 @@ io.on("connection", async (socket) => {
   }
 
   // --- Room Join ---
- socket.on("joinRoom", async ({ roomId }) => {
+  socket.on("joinRoom", async ({ roomId }) => {
     const room = await Room.findOne({ roomId });
     if (!room) {
       socket.emit("error", "Room not found");
@@ -98,6 +99,15 @@ io.on("connection", async (socket) => {
       io.to(roomId).emit("codeOutput", { output: `Error: ${err.message}` });
     }
   });
+
+
+  //trial code execution
+
+  socket.on("execute", async ({ containerId, language, code }) => {
+    const result = await codeExecution(containerId, language, code)
+    console.log("STDOUT:", result.stdout);
+    console.log("STDERR:", result.stderr);
+  })
 
   // --- Disconnect ---
   socket.on("disconnect", () => {

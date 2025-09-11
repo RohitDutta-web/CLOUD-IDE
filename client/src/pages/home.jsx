@@ -48,24 +48,34 @@ const socket = io(import.meta.env.VITE_BACKEND_URL, {
 export default function Home() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
-  
 
-  const handleJoinRoom = () => {
+
+  const handleJoinRoom = async () => {
     if (!document.cookie) return toast("Please login first");
 
 
     if (roomId.length < 1) return toast("Invalid Room id");
+    try {
+      console.log(roomId)
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/room/joinRoom`, { roomId: roomId }, {
+        withCredentials: true,
+      })
 
-    socket.emit("join-room", { roomId });
-    toast(`Joined ${roomId}`);
-    navigate(`/room/${roomId}`);
+      if (res.data?.success) {
+        navigate(`/room/${res.data?.room?.roomId}`)
+      }
+    }
+    catch (e) {
+      toast(e.response?.data?.message)
+    }
   };
 
   const handleCreateRoom = async () => {
     try {
       console.log(roomId)
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/room/createRoom`, { roomId : roomId}, {
+        `${import.meta.env.VITE_BACKEND_URL}/room/createRoom`, { roomId: roomId }, {
         withCredentials: true,
       })
 
@@ -168,7 +178,7 @@ export default function Home() {
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-green-400" >Enter a room id or click create a default named room</AlertDialogTitle>
                 <AlertDialogDescription className="text-green-700">
-                  <input onChange={(e) => setRoomId(e.target.value) } type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" />
+                  <input onChange={(e) => setRoomId(e.target.value)} type="text" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" />
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

@@ -83,7 +83,8 @@ export const joinRoom = async (req, res) => {
 
     return res.status(200).json({
       message: "Room joined",
-      success: true
+      success: true,
+      room
     })
 
 
