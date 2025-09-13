@@ -78,13 +78,15 @@ export const joinRoom = async (req, res) => {
     }
 
     await room.save();
+    const container = await createRoomContainer(roomId);
 
 
 
     return res.status(200).json({
       message: "Room joined",
       success: true,
-      room
+      room,
+      containerId: container.id
     })
 
 
