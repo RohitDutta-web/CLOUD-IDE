@@ -73,7 +73,7 @@ const codingLanguages = {
 
 export default function Room() {
 
- 
+
 
   const { roomId } = useParams();
 
@@ -85,47 +85,47 @@ export default function Room() {
   const [language, setLanguage] = useState(defaultLang);
   const [chatBox, setChatBox] = useState(false);
   const [output, setOutPut] = useState("");
-useEffect(() => {
-  if (!socket) return;
+  useEffect(() => {
+    if (!socket) return;
 
-  // 👉 Emit event when user joins
-  socket.emit("joinRoom", { roomId });
+    // 👉 Emit event when user joins
+    socket.emit("joinRoom", { roomId });
 
-  // 👉 Listen for confirmation from server
-  socket.on("userJoined", (userId) => {
-    toast(`Welcome user: ${userId} joined room ${roomId}`);
-  });
+    // 👉 Listen for confirmation from server
+    socket.on("userJoined", (userId) => {
+      toast(`Welcome user: ${userId} joined room ${roomId}`);
+    });
 
-  // 👉 Listen for code output
-  socket.on("codeOutput", ({ output }) => {
-    setOutPut((prev) => prev + output);
-  });
+    // 👉 Listen for code output
+    socket.on("codeOutput", ({ output }) => {
+      setOutPut((prev) => prev + output);
+    });
 
-  // cleanup to avoid multiple listeners
-  return () => {
-    socket.off("userJoined");
-    socket.off("codeOutput");
-  };
-}, [socket, roomId]);
+    // cleanup to avoid multiple listeners
+    return () => {
+      socket.off("userJoined");
+      socket.off("codeOutput");
+    };
+  }, [socket, roomId]);
 
 
-  
+
   //handling code and sending it's details to backend 
   const handleRunCode = async () => {
     try {
-   
+
       socket.emit("execute", {
-        language: language.toLowerCase(),
         roomId,
+        language: language.toLowerCase(),
         code,
-     
-       
-      
+
+
+
       })
 
-     
 
-     }
+
+    }
     catch (e) {
       console.log(e)
     }
@@ -189,13 +189,13 @@ useEffect(() => {
             />
             <Drawer>
               <DrawerTrigger onClick={handleRunCode}>
-               
-                  <CiPlay1 className="cursor-pointer bg-green-800 rounded text-green-400 pl-3 pr-3 pt-2 pb-2 text-5xl"/>
-                
+
+                <CiPlay1 className="cursor-pointer bg-green-800 rounded text-green-400 pl-3 pr-3 pt-2 pb-2 text-5xl" />
+
               </DrawerTrigger>
               <DrawerContent>
                 <DrawerHeader>
-                  <DrawerTitle>{ output }</DrawerTitle>
+                  <DrawerTitle>{output}</DrawerTitle>
                   <DrawerDescription>This action cannot be undone.</DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter>

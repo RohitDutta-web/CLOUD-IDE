@@ -202,6 +202,8 @@ export const createRoomContainer = async (roomId) => {
         }
 
         return existingContainer;
+      } else {
+        return existingContainer;
       }
     }
 
@@ -239,8 +241,12 @@ export const createRoomContainer = async (roomId) => {
 
 export const codeExecution = async (language, containerId, code) => {
   try {
+    console.log(containerId)
     const container = await docker.getContainer(containerId)
+    console.log(container)
+  
     const config = languageDockerConfig[language]
+   
 
     const exec = await container.exec({
       Cmd: config.cmd(code),

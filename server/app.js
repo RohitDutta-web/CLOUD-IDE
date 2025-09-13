@@ -84,7 +84,7 @@ io.on("connection", async (socket) => {
     // Notify others
     io.to(roomId).emit("userJoined", socket.userId);
   })
-  
+
   // --- Chat Messages ---
   socket.on("send-message", ({ roomId, message, sender }) => {
     io.to(roomId).emit("receive-message", { message, sender });
@@ -103,8 +103,15 @@ io.on("connection", async (socket) => {
 
   //trial code execution
 
-  socket.on("execute", async ({ containerId, language, code }) => {
-    const result = await codeExecution(containerId, language, code)
+  socket.on("execute", async ({ roomId, language, code }) => {
+    const room = await Room.findOne({roomId})
+    if (!room) {
+      console.log("Invalid room ")
+    }
+
+    const containerId = room.containerId;
+    const result = await codeExecution( language,containerId, code)
+    console.log(result)
     console.log("STDOUT:", result.stdout);
     console.log("STDERR:", result.stderr);
   })
