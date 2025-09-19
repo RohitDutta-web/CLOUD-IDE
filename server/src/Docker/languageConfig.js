@@ -2,7 +2,13 @@
 export const languageDockerConfig = {
   js: {
     image: "node:20-alpine",
-    cmd: (code) => ["node", "-e", code], // inline JS execution
+    cmd: (code) => ["node", "-e", `const fn = () =>{
+${code}
+}
+
+let result = fn()
+
+  console.log("__RETURN__:" + JSON.stringify(result));`], // inline JS execution
     workdir: "/app"
   },
   python: {

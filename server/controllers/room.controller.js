@@ -68,7 +68,7 @@ export const joinRoom = async (req, res) => {
     const room = await Room.findOne({ roomId });
     if (!room) {
       return res.status(400).json({
-        message: "Invalid room id",
+        message: "Invalid room id or Room expired",
         success: false
       })
     }

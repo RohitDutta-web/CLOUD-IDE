@@ -232,9 +232,6 @@ export const createRoomContainer = async (roomId) => {
   catch (e) {
     console.log(e.message)
   }
-
-
-
 }
 
 
@@ -246,8 +243,6 @@ export const codeExecution = async (language, containerId, code) => {
     console.log(container)
   
     const config = languageDockerConfig[language]
-   
-
     const exec = await container.exec({
       Cmd: config.cmd(code),
       AttachStdout: true,

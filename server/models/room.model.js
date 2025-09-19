@@ -25,4 +25,6 @@ const roomSchema = new mongoose.Schema({
 
 const Room = mongoose.model("Room", roomSchema)
 
+roomSchema.index({ createdAt: 1 }, { expireAfterSeconds: 43200 })
+
 export default Room;
