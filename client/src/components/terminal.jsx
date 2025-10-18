@@ -28,10 +28,7 @@ export default function TerminalUi({ roomId = "default-room" }) {
     term.writeln("Welcome to codeNimbus");
     term.writeln("Connecting to server...\r\n");
 
-    socket.on("connect", () => {
-      term.writeln("Connected. Initializing shell...\r\n");
-      socket.emit("join-room", roomId);
-    });
+   
 
     // Receive output from backend pty
     socket.on("terminal-output", (data) => {
