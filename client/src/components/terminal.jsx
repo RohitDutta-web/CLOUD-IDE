@@ -2,11 +2,12 @@ import { Terminal } from '@xterm/xterm';
 import { useEffect, useRef } from 'react';
 import "@xterm/xterm/css/xterm.css";
 import io from "socket.io-client";
-
+import { FitAddon } from '@xterm/addon-fit';
 const socket = io(import.meta.env.VITE_BACKEND_URL, {
   withCredentials: true,
   transports: ['websocket'],
 });
+
 
 export default function TerminalUi({ roomId = "default-room" }) {
   const terminalRef = useRef(null);
@@ -20,8 +21,15 @@ export default function TerminalUi({ roomId = "default-room" }) {
 
     const term = new Terminal({
       cursorBlink: true,
-      rows: 24,
       fontSize: 14,
+    });
+
+    const fitAddon = new FitAddon();
+    term.loadAddon(fitAddon);
+    fitAddon.fit();
+
+    window.addEventListener("resize", () => {
+      fitAddon.fit();
     });
 
     termRef.current = term;
@@ -52,6 +60,7 @@ export default function TerminalUi({ roomId = "default-room" }) {
 
     return () => {
       socket.disconnect();
+      window.removeEventListener("resize", fitAddon.fit);
 
     };
   }, [roomId]);
@@ -60,7 +69,14 @@ export default function TerminalUi({ roomId = "default-room" }) {
     <div
       id="terminal"
       ref={terminalRef}
-      style={{ width: "50%", height: "100vh", backgroundColor: "black" }}
-    />
+      style={{
+        width: "50%",
+        height: "100vh",
+        backgroundColor: "black",
+        padding: "5px",
+        overflow: "auto",
+      }}
+
+    ></div>
   );
 }
