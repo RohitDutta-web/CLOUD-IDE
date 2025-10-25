@@ -12,6 +12,7 @@ export default function TerminalUi({ roomId = "default-room" }) {
   const terminalRef = useRef(null);
   const isRendered = useRef(false);
   const termRef = useRef(null);
+  const command = useRef("");
 
   useEffect(() => {
     if (isRendered.current) return;
@@ -28,23 +29,30 @@ export default function TerminalUi({ roomId = "default-room" }) {
     term.writeln("Welcome to codeNimbus");
     term.writeln("Connecting to server...\r\n");
 
-   
 
-    // Receive output from backend pty
-    socket.on("terminal-output", (data) => {
-      term.write(data);
-    });
-
-    // Send user input to backend
     term.onData((data) => {
-      socket.emit("terminal-input", data);
-    });
+      if (data == '\r') {
+        //need to implement command execution here
+        term.write('\r\n');
+        command.current = "";
+      } else if (data == "\u007F") {
+        if (command.current.length > 0) {
+          command.current = command.current.slice(0, -1)
+          term.write('\b \b');
 
-   
+        }
+      } else {
+        command.current += data;
+        term.write(data);
+      }
+    })
+
+
+
 
     return () => {
       socket.disconnect();
-  
+
     };
   }, [roomId]);
 
@@ -52,7 +60,7 @@ export default function TerminalUi({ roomId = "default-room" }) {
     <div
       id="terminal"
       ref={terminalRef}
-      style={{ width: "100%", height: "500px", backgroundColor: "black" }}
+      style={{ width: "50%", height: "100vh", backgroundColor: "black" }}
     />
   );
 }

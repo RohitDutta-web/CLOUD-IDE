@@ -13,21 +13,18 @@ export default function CodingPlayGround() {
  
   return (
     <>
-       
-      <div className='flex w-full max-w-screen'>
-        <div id='files' className='w-[16%]'>
-          
-
-        </div>
+      <div className='flex'>
          <Editor
-          height="70vh"
-          width="84%"
+          height="100vh"
+          width="50%"
         defaultLanguage="javascript"
         defaultValue="// some comment"
-        onMount={handleEditorDidMount}
+          onMount={handleEditorDidMount}
+          theme='vs-dark'
       />
-      </div>
-      <Terminal/>
+      
+      <Terminal className=""/>
+        </div>
     
     </>
   )
