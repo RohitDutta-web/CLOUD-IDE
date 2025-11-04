@@ -70,11 +70,11 @@ export default function TerminalUi({ roomId = "default-room" }) {
       id="terminal"
       ref={terminalRef}
       style={{
-        width: "50%",
-        height: "100vh",
+        width: "100%",
+        height: "50%",
         backgroundColor: "black",
         padding: "5px",
-        overflow: "auto",
+        overflow: "hidden",
       }}
 
     ></div>
