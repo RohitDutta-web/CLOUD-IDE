@@ -46,7 +46,7 @@ function App() {
             <Room />
           </ProtectedRoute>} />
         <Route path='/' element={<Home />} />
-        <Route path='/codingPlayGround' element={
+        <Route path='/codingPlayGround/:codingLanguage' element={
           <ProtectedRoute>
           <CodingPlayGround />
         </ProtectedRoute>} />

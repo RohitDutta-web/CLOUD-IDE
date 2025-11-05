@@ -48,6 +48,7 @@ const socket = io(import.meta.env.VITE_BACKEND_URL, {
 export default function Home() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
+  const [codingLang, setCodingLang] = useState("");
 
 
   const handleJoinRoom = async () => {
@@ -210,7 +211,35 @@ export default function Home() {
           <PopoverTrigger className="absolute text-green-400  top-5 right-40  rounded font-bold text-5xl cursor-pointer mr-5"><FaRegUserCircle /></PopoverTrigger>
           <PopoverContent className="cursor-pointer flex flex-col items-center w-60 justify-center gap-2">
             <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={() => navigate("/details")}>Profile Details</p>
-            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" onClick={() => navigate("/codingPlayGround")}>Playground</p>
+            <p className="font-bold border-2 w-full border-white hover:border-b-zinc-400 text-center" > <AlertDialog>
+              <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Playground</AlertDialogTrigger>
+              <AlertDialogContent className="bg-zinc-900 border-none shadow-md shadow-green-400">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-green-400" >Choose your language and start coding on playground</AlertDialogTitle>
+                  <AlertDialogDescription className="text-green-700">
+                    <select onChange={(e) => setCodingLang(e.target.value)} type="" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" >
+                      <option value="" disabled>
+                        Select Language
+                      </option>
+                      <option value="javascript">JavaScript</option>
+                      <option value="python">Python</option>
+                      <option value="c">C</option>
+                      <option value="c++">C++</option>
+                      <option value="java">Java</option>
+                      <option value="go">Go</option>
+                      <option value="rust">Rust</option>
+                      <option value="php">PHP</option>
+                      <option value="ruby">Ruby</option>
+                      <option value="sql">SQL</option>
+                    </select>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
+                  <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={() => navigate(`/codingPlayGround/${codingLang}`)}>Enter</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog></p>
 
             <AlertDialog>
               <AlertDialogTrigger className="font-bold border-2 w-full cursor-pointer border-white hover:border-b-zinc-400 text-center">Log Out</AlertDialogTrigger>
