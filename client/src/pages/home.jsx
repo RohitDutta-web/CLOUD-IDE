@@ -218,9 +218,7 @@ export default function Home() {
                   <AlertDialogTitle className="text-green-400" >Choose your language and start coding on playground</AlertDialogTitle>
                   <AlertDialogDescription className="text-green-700">
                     <select onChange={(e) => setCodingLang(e.target.value)} type="" className="bg-zinc-600 w-[70%] focus:outline-offset-2 focus:outline-green-400 p-2 rounded text-white" >
-                      <option value="" disabled>
-                        Select Language
-                      </option>
+                      <option value="">Select language</option>
                       <option value="javascript">JavaScript</option>
                       <option value="python">Python</option>
                       <option value="c">C</option>
@@ -236,7 +234,15 @@ export default function Home() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel className="bg-zinc-400 text-white cursor-pointer">Cancel</AlertDialogCancel>
-                  <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={() => navigate(`/codingPlayGround/${codingLang}`)}>Enter</AlertDialogAction>
+                  <AlertDialogAction className="bg-green-600 cursor-pointer hover:bg-green-400" onClick={() => {
+                    if (codingLang.length < 1) {
+                      toast("Please select a language")
+                      return;
+                    } else {
+                      navigate(`/codingPlayground/${codingLang}`)
+
+                    }
+                  }}>Enter</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog></p>

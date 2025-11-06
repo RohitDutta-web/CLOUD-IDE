@@ -35,8 +35,10 @@ export default function CodingPlayGround() {
         <div className='flex flex-col w-[50%]'>
           <Terminal />
           <div className='text-white flex flex-col items-center justify-center h-[50%] border-2 m-2 border-zinc-400 rounded'>
-            <div className='flex flex-col items-center gap-2 font-bold'>
-             Let ai check your code and suggest improvements
+            <div className='flex flex-col items-center gap-2 font-bold '>
+              <span className='text-2xl'>
+                Let ai check your code and suggest improvements
+             </span>
               <Button/>
             </div>
              </div>
