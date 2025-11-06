@@ -3,6 +3,7 @@ import Editor from '@monaco-editor/react';
 import { useRef, useState } from 'react'
 import Terminal from "../components/terminal.jsx"
 import { useParams } from "react-router-dom"
+import Button from '../components/aiButton.jsx';
 
 
 export default function CodingPlayGround() {
@@ -33,7 +34,12 @@ export default function CodingPlayGround() {
 
         <div className='flex flex-col w-[50%]'>
           <Terminal />
-          <div>AI FOR SUGGESTIONS <button >{codingLanguage}</button> </div>
+          <div className='text-white flex flex-col items-center justify-center h-[50%] border-2 m-2 border-zinc-400 rounded'>
+            <div className='flex flex-col items-center gap-2 font-bold'>
+             Let ai check your code and suggest improvements
+              <Button/>
+            </div>
+             </div>
 
         </div>
       </div>
