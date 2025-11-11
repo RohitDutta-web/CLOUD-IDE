@@ -100,17 +100,30 @@ io.on("connection", async (socket) => {
     }
   });
 
+  //playing ground code execution
+  socket.on("execute_playground_Code", async ({ language, code }) => {
+    try {
+      const containers = await docker.listContainers({ all: true });
+      const containerId = containers.find(c => c.Names.includes("codeNimbus-image"));
+
+      const result = await codeExecution(language, containerId, code);
+      socket.emit("codeOutput", { output: result });
+    } catch (err) {
+      socket.emit("codeOutput", { output: `Error: ${err.message}` });
+    }
+  });
+
 
   //trial code execution
 
   socket.on("execute", async ({ roomId, language, code }) => {
-    const room = await Room.findOne({roomId})
+    const room = await Room.findOne({ roomId })
     if (!room) {
       console.log("Invalid room ")
     }
 
     const containerId = room.containerId;
-    const result = await codeExecution( language,containerId, code)
+    const result = await codeExecution(language, containerId, code)
     console.log(result)
     console.log("STDOUT:", result.stdout);
     console.log("STDERR:", result.stderr);

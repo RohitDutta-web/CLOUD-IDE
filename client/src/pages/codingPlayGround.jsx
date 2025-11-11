@@ -39,7 +39,7 @@ export default function CodingPlayGround() {
               <span className='text-2xl'>
                 Let ai check your code and suggest improvements
              </span>
-              <Button/>
+              <Button />
             </div>
              </div>
 
